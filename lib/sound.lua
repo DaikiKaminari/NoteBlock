@@ -59,7 +59,7 @@ function addSound(filename, soundName, soundID)
         end
     end
     sounds[soundName] = soundID
-    encodeAndSavePretty(filename, sounds)
+    objectJSON.encodeAndSavePretty(filename, sounds)
     return true
 end
 
@@ -70,7 +70,7 @@ function delSound(filename, soundName)
     end
     local sounds = objectJSON.decodeFromFile(filename)
     local soundID = removekey(sounds, soundName)
-    encodeAndSavePretty(filename, sounds)
+    objectJSON.encodeAndSavePretty(filename, sounds)
     return soundID
 end
 

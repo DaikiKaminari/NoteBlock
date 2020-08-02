@@ -35,21 +35,18 @@ local function delSound(filename, soundName)
 end
 
 local function parse(input)
-    while true do
-        local input = io.read()
-        if input == "add" then
-            print("Adding new sound, please specify :\nSound Name : ")
-            local soundName = io.read()
-            print("Sound ID : ")
-            local soundID = io.read()
-            addSound("sounds", soundName, soundID)
-        elseif input == "del" then
-            print("Deleting a sound, please specify :\nSound Name : ")
-            local soundName = io.read()
-            delSound("sounds", soundName)
-        else
-            print("Input not recognized as an instruction.")
-        end
+    if input == "add" then
+        print("Adding new sound, please specify :\nSound Name : ")
+        local soundName = io.read()
+        print("Sound ID : ")
+        local soundID = io.read()
+        addSound("sounds", soundName, soundID)
+    elseif input == "del" then
+        print("Deleting a sound, please specify :\nSound Name : ")
+        local soundName = io.read()
+        delSound("sounds", soundName)
+    else
+        print("Input not recognized as an instruction.")
     end
 end
 
