@@ -6,11 +6,11 @@ local monitor               -- table : peripheral, display monitor
 --- UTILS ---
 local function actualizeDisplay()
     local native = term.native()
-    term.redirect(monitor)
     if monitor ~= nil then
         term.redirect(monitor)
+        sound.displaySounds(filename, true)
     end
-    sound.displaySounds(filename)
+    sound.displaySounds(filename, false)
     term.redirect(native)
 end
 
@@ -37,13 +37,15 @@ local function init()
         error("NoteBlock peripheral not found.")
     end
     monitor = peripheral.find("monitor")
-    actualizeDisplay()
+    if monitor ~= nil then
+        actualizeDisplay()
+    end
 end
 
 --- FUNCTIONS ---
 -- add a new sound to json file containing all the sounds with informations provided by user
 local function addSound()
-    print("Adding new sound, please specify :\nSound Name : ")
+    print("Adding new sound, please specify :\nSound name : ")
     local soundName = io.read()
     print("Sound ID : ")
     local soundID = io.read()
@@ -57,7 +59,7 @@ end
 
 -- delete a sound from json file containing all the sounds
 local function delSound()
-    print("Deleting a sound, please specify :\nSound Name : ")
+    print("Deleting a sound, please specify :\nSound name : ")
     local soundName = io.read()
     local soundID = sound.delSound(filename, soundName)
     if soundID ~= nil then
@@ -89,7 +91,7 @@ end
 local function playSound(here)
     local soundID
     print("Playing a sound, please specify:")
-    print("SoundName : ")
+    print("Sound name : ")
     local soundName = io.read()
     local soundID = sound.getSoundID(filename, soundName)
     if soundID == nil then
@@ -109,12 +111,13 @@ local function playCustomSound(here)
     print("Playing a sound, please specify:\nUsing ID (Y/N) ?")
     local usingID = io.read()
     local soundID
-    if usingID == "Y" then
+    if string.upper(usingID) == "Y" then
         print("SoundID : ")
         soundID = io.read()
     else
+        print("Sound name : ")
         local soundName = io.read()
-        local soundID = sounds.getSoundID(filename, soundName)
+        local soundID = sound.getSoundID(filename, soundName)
         if soundID == nil then
             print("No sound matching this name.")
             return
@@ -140,6 +143,7 @@ local function parse(input)
     elseif string.upper(input) == "PLAY_HERE" then playSound(true)
     elseif string.upper(input) == "PLAY_CUSTOM" then playCustomSound(false)
     elseif string.upper(input) == "PLAY_CUSTOM_HERE" then playCustomSound(true)
+    elseif string.upper(input) == "DISPLAY" then actualizeDisplay()
     else
         print("Input not recognized as an instruction.")
         sleep(2)
@@ -149,14 +153,17 @@ end
 local function main()
     loadAPIs()
     init()
-    local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE"}
+    local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "DISPLAY"}
+    local input
     while true do
-        term.clear()
+        if string.upper(input) ~= "DISPLAY" then
+            term.clear()
+        end
         print("\nWaiting for an instruction...")
         for _,v in pairs(inst) do
             print(" - " .. v)
         end
-        local input = io.read()
+        input = io.read()
         parse(input)
     end
 end

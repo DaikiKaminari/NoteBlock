@@ -79,20 +79,26 @@ function delSound(filename, soundName)
 end
 
 -- display all sounds
-function displaySounds(filename)
+function displaySounds(filename, oneByLine)
     local sounds = objectJSON.decodeFromFile(filename)
     local w, h = term.getSize()
     term.clear()
-    local line = ""
-    for k,_ in pairs(sounds) do
-        if string.len(line .. k) < w then
-            line = line .. " " .. k
-        else
-            print(line)
-            line = ""
+    if oneByLine then
+        for k,_ in pairs(sounds) do
+            print(k)
         end
-    end
-    if line ~= "" then
-        print(line)
+    else
+        local line = ""
+        for k,_ in pairs(sounds) do
+            if string.len(line .. k) + 3 <= w then
+                line = line .. " / " .. k
+            else
+                print(line)
+                line = ""
+            end
+        end
+        if line ~= "" then
+            print(line)
+        end
     end
 end
