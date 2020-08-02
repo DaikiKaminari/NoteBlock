@@ -1,7 +1,7 @@
 local filename = "sounds"   -- string : name of .json file containing sound list
 local noteBlock             -- table : peripheral, note block
 local monitor               -- table : peripheral, display monitor
-
+local conf                  -- table : configuration (x,y,z coords of the computer)
 
 --- UTILS ---
 local function actualizeDisplay()
@@ -26,6 +26,30 @@ local function loadAPIs()
         error("[lib/sound] not found.")
     end
     os.loadAPI("lib/sound")
+end
+
+local function loadConfig()
+    if fs.exists("config") then
+        conf = objectJSON.decodeFromFile("config")
+    else
+        print("Please enter computer coordinates :")
+        while type(x) ~= "number" then
+            print("X :")
+            local x = tonumber(io.read())
+        end
+        while type(y) ~= "number" then
+            print("y :")
+            local y = tonumber(io.read())
+        end
+        while type(z) ~= "number" then
+            print("z :")
+            local z = tonumber(io.read())
+        end
+        conf["x"] = x
+        conf["y"] = y
+        conf["z"] = z
+        objectJSON.encodeAndSavePretty("config", conf)
+    end
 end
 
 local function init()
@@ -75,16 +99,14 @@ local function getCoords()
     print("Enter coordinates :")
     print("X : ")
     local x2 = tonumber(io.read())
+    x2 = type(x2) == "number" and x2 or 0
     print("Y : ")
     local y2 = tonumber(io.read())
+    y2 = type(y2) == "number" and y2 or 0
     print("Z : ")
     local z2 = tonumber(io.read())
-    local x,y,z = gps.locate()
-    if x2 == nil or y2 == nil or z2 == nil then
-        return x, y, z
-    else
-        return x2 - x, y2 - y, z2 - z
-    end
+    z2 = type(z2) == "number" and z2 or 0
+    return x2 - conf["x"], y2 - conf["y"], z2 - conf["z"]
 end
 
 -- play a sound that is registered in json sound list
@@ -152,6 +174,7 @@ end
 
 local function main()
     loadAPIs()
+    loadConfig()
     init()
     local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "DISPLAY"}
     local input = ""
