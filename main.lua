@@ -14,7 +14,7 @@ local function loadAPIs()
 end
 
 local function init()
-    if not exists("sounds") then
+    if not fs.exists("sounds") then
         error("[sounds] not found.")
     end
 end
@@ -38,14 +38,17 @@ local function parse(input)
     while true do
         local input = io.read()
         if input == "add" then
-            print("\nAdding new sound, please specify :")
-            local soundName = io.read("Sound Name :")
-            local soundID = io.read("Sound ID :")
+            print("Adding new sound, please specify :\nSound Name : ")
+            local soundName = io.read()
+            print("Sound ID : ")
+            local soundID = io.read()
             addSound("sounds", soundName, soundID)
         elseif input == "del" then
-            print("\nDeleting a sound, please specify :")
-            local soundName = io.read("Sound Name :")
+            print("Deleting a sound, please specify :\nSound Name : ")
+            local soundName = io.read()
             delSound("sounds", soundName)
+        else
+            print("Input not recognized as an instruction.")
         end
     end
 end
@@ -55,7 +58,7 @@ local function main()
     init()
     while true do
         term.clear()
-        print("Waiting for an instruction...")
+        print("\nWaiting for an instruction...")
         local input = io.read()
         parse(input)
     end
