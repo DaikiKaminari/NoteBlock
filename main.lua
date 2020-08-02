@@ -128,10 +128,10 @@ local function playCustomSound(here)
     print("Pitch (0.0-2.0) : ")
     local pitch = tonumber(io.read())
     if here then
-        sound.playSound(noteBlock, soundID, pitch, volume, 1, 1, 1)
+        sound.playSound(noteBlock, soundID, 1, 1, 1, pitch, volume)
     else
         local x, y, z = getCoords()
-        sound.playSound(noteBlock, soundID, pitch, volume, x, y, z)
+        sound.playSound(noteBlock, soundID, x, y, z, pitch, volume)
     end
 end
 
@@ -154,7 +154,7 @@ local function main()
     loadAPIs()
     init()
     local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "DISPLAY"}
-    local input
+    local input = ""
     while true do
         if string.upper(input) ~= "DISPLAY" then
             term.clear()
