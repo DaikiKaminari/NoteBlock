@@ -88,8 +88,8 @@ function displaySounds(filename, oneByLine)
             print(k)
         end
     else
-        local line = ""
-        for k,_ in pairs(sounds) do
+        local line = sounds[1]
+        for k,_ in pairs(removekey(sounds, sounds[1])) do
             if string.len(line .. k) + 3 <= w then
                 line = line .. " / " .. k
             else
