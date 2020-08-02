@@ -18,6 +18,12 @@ local function removekey(tab, key)
 end
 
 --- FUNCTIONS ---
+-- returns sound ID corresponding to a sound name
+function getSoundID(filename, soundName)
+    local sounds = objectJSON.decodeFromFile(filename)
+    return sounds[soundName]
+end
+
 -- play a sound thanks to it's ID
 function playSound(noteBlock, soundID, dX, dY, dZ, pitch, volume)
     if noteBlock == nil then
@@ -28,11 +34,9 @@ function playSound(noteBlock, soundID, dX, dY, dZ, pitch, volume)
     end
     if pitch == nil then
         pitch = 1 
-        volume = 0
-    else
-        if volume < 0 or volume > 1000 then
-            error("[volume] value must be between 0 and 1000.")
-        end
+    end
+    if volume == nil then
+        volume = 100
     end
     if dX == nil then
         noteBlock.playSound(soundID, pitch, volume)
