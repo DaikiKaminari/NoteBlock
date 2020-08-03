@@ -100,11 +100,6 @@ local function delSound()
     actualizeDisplay()
 end
 
--- plays a sound multiple times (wrapper)
-local function playSoundMultipleTimes(noteBlock, soundID, times, delay, x, y, z, pitch, volume)
-    sound.playSoundMultipleTimes(noteBlock, soundID, times, delay, x, y, z, pitch, volume)
-end
-
 -- plays a sound and ask to repeat
 local function playSoundAndRepeat(noteBlock, soundID, x, y, z, pitch, volume)
     local play = ""
@@ -121,7 +116,7 @@ local function playSoundAndRepeat(noteBlock, soundID, x, y, z, pitch, volume)
             print("Delay between two sounds in second (nothing = no delay)")
             local delay = tonumber(io.read()) or nil
             print("Press *supp* to stop...")
-            parallel.wairForAny(waitForEchap, function() playSoundMultipleTimes(noteBlock, soundID, times, delay, x, y, z, pitch, volume) end)
+            parallel.waitForAny(waitForEchap, function() sound.playSoundMultipleTimes(noteBlock, soundID, times, delay, x, y, z, pitch, volume) end)
         end
     end
 end
@@ -131,13 +126,13 @@ local function getCoords()
     print("Enter coordinates :")
     print("X : ")
     local x2 = tonumber(io.read())
-    x2 = type(x2) == "number" and x2 or 0
+    x2 = type(x2) == "number" and x2 or conf["x"]
     print("Y : ")
     local y2 = tonumber(io.read())
-    y2 = type(y2) == "number" and y2 or 0
+    y2 = type(y2) == "number" and y2 or conf["y"]
     print("Z : ")
     local z2 = tonumber(io.read())
-    z2 = type(z2) == "number" and z2 or 0
+    z2 = type(z2) == "number" and z2 or conf["z"]
     return x2 - conf["x"], y2 - conf["y"], z2 - conf["z"]
 end
 
