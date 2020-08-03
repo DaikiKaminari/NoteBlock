@@ -42,18 +42,22 @@ local function loadConfig()
         conf = objectJSON.decodeFromFile("config")
     end
     if next(conf) == nil then
-        print("Please enter computer coordinates :")
+        print("\nPlease enter computer coordinates :")
         while type(conf["x"]) ~= "number" do
             print("X :")
             conf["x"] = tonumber(io.read())
         end
         while type(conf["y"]) ~= "number" do
-            print("y :")
+            print("Y :")
             conf["y"] = tonumber(io.read())
         end
         while type(conf["z"]) ~= "number" do
-            print("z :")
+            print("Z :")
             conf["z"] = tonumber(io.read())
+        end
+        while type(conf["radius"]) ~= "number" and type(conf["radius"]) < 0 do
+            print("\nMap radius :")
+            conf["radius"] = tonumber(io.read())
         end
         objectJSON.encodeAndSavePretty("config", conf)
     end
@@ -102,10 +106,10 @@ local function delSound()
 end
 
 -- plays a sound and ask to repeat
-local function playSoundAndRepeat(noteBlock, soundID, x, y, z, pitch, volume)
+local function playSoundAndRepeat(noteBlock, soundID, dx, dy, dz, pitch, volume)
     local play = ""
     while play == "" do
-        sound.playSound(noteBlock, soundID, x, y, z, pitch, volume)
+        sound.playSound(noteBlock, soundID, dx, dy, dz, pitch, volume)
         print("\nPlay the sound again ?")
         print(" - *nothing* : repeat the sound 1 time")
         print(" - spam : ask to repeat the sound multiple times")
@@ -126,15 +130,15 @@ end
 local function getCoords()
     print("\nEnter coordinates :")
     print("X : ")
-    local x2 = tonumber(io.read())
-    x2 = type(x2) == "number" and x2 or conf["x"]
+    local x = tonumber(io.read())
+    x = type(x) == "number" and x or conf["x"]
     print("Y : ")
     local y2 = tonumber(io.read())
-    y2 = type(y2) == "number" and y2 or conf["y"]
+    y = type(y) == "number" and y or conf["y"]
     print("Z : ")
-    local z2 = tonumber(io.read())
-    z2 = type(z2) == "number" and z2 or conf["z"]
-    return x2 - conf["x"], y2 - conf["y"], z2 - conf["z"]
+    local z = tonumber(io.read())
+    z = type(z) == "number" and z or conf["z"]
+    return x - conf["x"], y - conf["y"], z - conf["z"]
 end
 
 -- play a sound that is registered in json sound list
@@ -152,8 +156,8 @@ local function playSound(here)
     if here then
         playSoundAndRepeat(noteBlock, soundID)
     else
-        local x, y, z = getCoords()
-        playSoundAndRepeat(noteBlock, soundID, x, y, z)
+        local dx, dy, dz = getCoords()
+        playSoundAndRepeat(noteBlock, soundID, dx, dy, dz)
     end
 end
 
@@ -182,12 +186,29 @@ local function playCustomSound(here)
     if here then
         playSoundAndRepeat(noteBlock, soundID, 0, 0, 0, pitch, volume)
     else
-        local x, y, z = getCoords()
-        playSoundAndRepeat(noteBlock, soundID, x, y, z, pitch, volume)
+        local dx, dy, dz = getCoords()
+        playSoundAndRepeat(noteBlock, soundID, dx, dy, dz, pitch, volume)
     end
 end
 
--- parse the instructions and call the corresponding function
+-- plays the sound on the whole map
+local function playSoundGlobally()
+    actualizeDisplay(true)
+    local soundID
+    print("\nPlaying a sound, please specify:")
+    print("\nSound name : ")
+    local soundName = io.read()
+    local soundID = sound.getSoundID(filename, soundName)
+    if soundID == nil then
+        print("No sound matching this name.")
+        return
+    end
+    print("\nPitch (0.0-2.0) : ")
+    local pitch = tonumber(io.read())
+    sound.playSoundGlobally(noteBlock, soundID, conf["radius"], conf["x"], conf["y"], conf["z"], pitch)
+end
+
+-- parses the instructions and call the corresponding function
 local function parse(input)
     term.clear()
     if string.upper(input) == "ADD" then addSound()
@@ -196,6 +217,7 @@ local function parse(input)
     elseif string.upper(input) == "PLAY_HERE" then playSound(true)
     elseif string.upper(input) == "PLAY_CUSTOM" then playCustomSound(false)
     elseif string.upper(input) == "PLAY_CUSTOM_HERE" then playCustomSound(true)
+    elseif string.upper(input) == "PLAY_GLOBALLY" then playSoundGlobally()
     elseif string.upper(input) == "DISPLAY" then
         if monitor ~= nil then
             actualizeDisplay(true)
@@ -210,7 +232,7 @@ local function main()
     loadAPIs()
     loadConfig()
     init()
-    local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "DISPLAY"}
+    local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "PLAY_GLOBALLY", "DISPLAY"}
     local input = ""
     while true do
         if string.upper(input) ~= "DISPLAY" then

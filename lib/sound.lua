@@ -107,7 +107,7 @@ function playSound(noteBlock, soundID, dX, dY, dZ, pitch, volume)
         pitch = 1 
     end
     if volume == nil then
-        volume = 100
+        volume = 5
     end
     if dX == nil then
         noteBlock.playSound(soundID, pitch, volume)
@@ -126,10 +126,11 @@ function playSoundMultipleTimes(noteBlock, soundID, times, delay, dX, dY, dZ, pi
 end
 
 -- plays a sound on the whole map
-function playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch, volume)
-    volume = (volume >= 100) and volume or 100
-    for x0=0, mapRadius*2, 50 do
-        for z0=0, mapRadius*2, 50 do
+function playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch)
+    pitch = pitch or 1
+    local volume = 4
+    for x0=16*volume, mapRadius*2, 16*volume*1.4 do
+        for z0=16*volume, mapRadius*2, 16*volume*1.4 do
             playSound(noteBlock, soundID, x0 - x, 100 - y, z0 - z, pitch, volume)
         end
     end
