@@ -33,17 +33,17 @@ local function loadConfig()
         conf = objectJSON.decodeFromFile("config")
     else
         print("Please enter computer coordinates :")
-        while type(x) ~= "number" then
+        while type(conf["x"]) ~= "number" do
             print("X :")
-            local x = tonumber(io.read())
+            conf["x"] = tonumber(io.read())
         end
-        while type(y) ~= "number" then
+        while type(conf["y"]) ~= "number" do
             print("y :")
-            local y = tonumber(io.read())
+            conf["y"] = tonumber(io.read())
         end
-        while type(z) ~= "number" then
+        while type(conf["z"]) ~= "number" do
             print("z :")
-            local z = tonumber(io.read())
+            conf["z"] = tonumber(io.read())
         end
         conf["x"] = x
         conf["y"] = y
