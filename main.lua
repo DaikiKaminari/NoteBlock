@@ -100,6 +100,11 @@ local function delSound()
     actualizeDisplay()
 end
 
+-- plays a sound multiple times (wrapper)
+local function playSoundMultipleTimes(noteBlock, soundID, times, delay, x, y, z, pitch, volume)
+    sound.playSoundMultipleTimes(noteBlock, soundID, times, delay, x, y, z, pitch, volume)
+end
+
 -- plays a sound and ask to repeat
 local function playSoundAndRepeat(noteBlock, soundID, x, y, z, pitch, volume)
     local play = ""
@@ -116,7 +121,7 @@ local function playSoundAndRepeat(noteBlock, soundID, x, y, z, pitch, volume)
             print("Delay between two sounds in second (nothing = no delay)")
             local delay = tonumber(io.read()) or nil
             print("Press *supp* to stop...")
-            parallel.wairForAny(waitForEchap, function() sound.playSoundMultipleTimes(noteBlock, soundID, times, delay, x, y, z, pitch, volume) end)
+            parallel.wairForAny(waitForEchap, function() playSoundMultipleTimes(noteBlock, soundID, times, delay, x, y, z, pitch, volume) end)
         end
     end
 end
