@@ -113,9 +113,9 @@ local function playSoundAndRepeat(noteBlock, soundID, x, y, z, pitch, volume)
         play = io.read()
         if string.upper(play) == "SPAM" then
             print("\nTimes the sound will be repeated (nothing = unlimited)")
-            local times = tonumber(io.read()) or 999999
+            local times = tonumber(io.read())
             print("\nDelay between two sounds in second (nothing = no delay)")
-            local delay = tonumber(io.read()) or nil
+            local delay = tonumber(io.read())
             print("\nPress *supp* to stop...")
             parallel.waitForAny(waitForEchap, function() sound.playSoundMultipleTimes(noteBlock, soundID, times, delay, x, y, z, pitch, volume) end)
         end
@@ -160,7 +160,7 @@ end
 -- play a sound registered in json sound list or with an ID, can specify each parameter
 local function playCustomSound(here)
     actualizeDisplay(true)
-    print("\nPlaying a sound, please specify:\nUsing ID (Y/N) ?")
+    print('\nPlaying a sound, please specify:\nUsing ID (enter "y" for yes) ?')
     local usingID = io.read()
     local soundID
     if string.upper(usingID) == "Y" then
@@ -169,7 +169,7 @@ local function playCustomSound(here)
     else
         print("\nSound name : ")
         local soundName = io.read()
-        local soundID = sound.getSoundID(filename, soundName)
+        soundID = sound.getSoundID(filename, soundName)
         if soundID == nil then
             print("No sound matching this name.")
             return
@@ -180,7 +180,7 @@ local function playCustomSound(here)
     print("\nPitch (0.0-2.0) : ")
     local pitch = tonumber(io.read())
     if here then
-        playSoundAndRepeat(noteBlock, soundID, 1, 1, 1, pitch, volume)
+        playSoundAndRepeat(noteBlock, soundID, 0, 0, 0, pitch, volume)
     else
         local x, y, z = getCoords()
         playSoundAndRepeat(noteBlock, soundID, x, y, z, pitch, volume)

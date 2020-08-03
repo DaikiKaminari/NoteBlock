@@ -18,50 +18,6 @@ local function removekey(tab, key)
 end
 
 --- FUNCTIONS ---
--- returns sound ID corresponding to a sound name
-function getSoundID(filename, soundName)
-    local sounds = objectJSON.decodeFromFile(filename)
-    local soundID = sounds[soundName]
-    if soundID == nil then
-        soundID = sounds[sting.upper(soundName)]
-    end
-    if soundID == nil then
-        soundID = sounds[sting.lower(soundName)]
-    end
-    return soundID
-end
-
--- plays a sound thanks to it's ID
-function playSound(noteBlock, soundID, dX, dY, dZ, pitch, volume)
-    if noteBlock == nil then
-        error("[noteBlock] peripheral is nil.")
-    end
-    if soundID == nil then
-        error("[soundID] is nil.")
-    end
-    if pitch == nil then
-        pitch = 1 
-    end
-    if volume == nil then
-        volume = 100
-    end
-    if dX == nil then
-        noteBlock.playSound(soundID, pitch, volume)
-    else
-        noteBlock.playSound(soundID, pitch, volume, dX, dY, dZ)
-    end
-end
-
--- plays a sound multiple times
-function playSoundMultipleTimes(noteBlock, soundID, times, delay, dX, dY, dZ, pitch, volume)
-    for i=times, 1, -1 do
-        playSound(noteBlock, soundID, dX, dY, dZ, pitch, volume)
-        if delay ~= nil then
-            sleep(delay)
-        end
-    end
-end
-
 -- add a new sound to the list
 function addSound(filename, soundName, soundID)
     if soundName == nil then
@@ -95,6 +51,19 @@ function delSound(filename, soundName)
     return soundID
 end
 
+-- returns sound ID corresponding to a sound name
+function getSoundID(filename, soundName)
+    local sounds = objectJSON.decodeFromFile(filename)
+    local soundID = sounds[soundName]
+    if soundID == nil then
+        soundID = sounds[sting.upper(soundName)]
+    end
+    if soundID == nil then
+        soundID = sounds[sting.lower(soundName)]
+    end
+    return soundID
+end
+
 -- display all sounds
 function displaySounds(filename, oneByLine)
     local sounds = objectJSON.decodeFromFile(filename)
@@ -122,6 +91,46 @@ function displaySounds(filename, oneByLine)
         end
         if line ~= "" then
             print(line)
+        end
+    end
+end
+
+-- plays a sound thanks to it's ID
+function playSound(noteBlock, soundID, dX, dY, dZ, pitch, volume)
+    if noteBlock == nil then
+        error("[noteBlock] peripheral is nil.")
+    end
+    if soundID == nil then
+        error("[soundID] is nil.")
+    end
+    if pitch == nil then
+        pitch = 1 
+    end
+    if volume == nil then
+        volume = 100
+    end
+    if dX == nil then
+        noteBlock.playSound(soundID, pitch, volume)
+    else
+        noteBlock.playSound(soundID, pitch, volume, dX, dY, dZ)
+    end
+end
+
+-- plays a sound multiple times
+function playSoundMultipleTimes(noteBlock, soundID, times, delay, dX, dY, dZ, pitch, volume)
+    delay = delay or 0.2
+    while not times or times > 0 do
+        playSound(noteBlock, soundID, dX, dY, dZ, pitch, volume)
+        sleep(delay)
+    end
+end
+
+-- plays a sound on the whole map
+function playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch, volume)
+    volume = (volume >= 100) and volume or 100
+    for x0=0, mapRadius*2, 50 do
+        for z0=0, mapRadius*2, 50 do
+            playSound(noteBlock, soundID, x0 - x, 100 - y, z0 - z, pitch, volume)
         end
     end
 end
