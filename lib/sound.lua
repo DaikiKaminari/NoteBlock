@@ -93,7 +93,7 @@ function displaySounds(filename, oneByLine)
         end
     else
         local line
-        for k,_ in pairs(removekey(sounds, sounds[1])) do
+        for k,_ in pairs(sounds) do
             if line == nil then
                 line = k
             elseif string.len(line .. k) + 3 <= w then
