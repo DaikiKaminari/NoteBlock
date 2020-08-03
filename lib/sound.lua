@@ -31,7 +31,7 @@ function getSoundID(filename, soundName)
     return soundID
 end
 
--- play a sound thanks to it's ID
+-- plays a sound thanks to it's ID
 function playSound(noteBlock, soundID, dX, dY, dZ, pitch, volume)
     if noteBlock == nil then
         error("[noteBlock] peripheral is nil.")
@@ -49,6 +49,16 @@ function playSound(noteBlock, soundID, dX, dY, dZ, pitch, volume)
         noteBlock.playSound(soundID, pitch, volume)
     else
         noteBlock.playSound(soundID, pitch, volume, dX, dY, dZ)
+    end
+end
+
+-- plays a sound multiple times
+function playSoundMultipleTimes(noteBlock, soundID, times, delay, dX, dY, dZ, pitch, volume)
+    for i=times, 1, -1 do
+        playSound(noteBlock, soundID, dX, dY, dZ, pitch, volume)
+        if delay ~= nil then
+            sleep(delay)
+        end
     end
 end
 

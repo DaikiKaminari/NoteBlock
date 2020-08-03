@@ -9,9 +9,17 @@ local function actualizeDisplay()
     if monitor ~= nil then
         term.redirect(monitor)
         sound.displaySounds(filename, true)
+    else
+        sound.displaySounds(filename, false)
+        term.redirect(native)
     end
-    sound.displaySounds(filename, false)
-    term.redirect(native)
+end
+
+local function waitForEchap()
+    local event, nbKey
+    while event ~= "key" and nbKey ~= 211 do
+        sleep(0)
+    end
 end
 
 --- INIT ---
@@ -94,11 +102,22 @@ end
 
 -- plays a sound and ask to repeat
 local function playSoundAndRepeat(noteBlock, soundID, x, y, z, pitch, volume)
-    local play
-    while not play do
+    local play = ""
+    while play == "" do
         sound.playSound(noteBlock, soundID, x, y, z, pitch, volume)
-        print("Play the sound again ? (enter nothing to repeat and anything to stop)")
+        print("Play the sound again ?")
+        print(" - *nothing* : repeat the sound 1 time")
+        print(" - spam : ask to repeat the sound multiple times")
+        print(" - anything else will stop the program")
         play = io.read()
+        if string.upper(play) == "SPAM" then
+            print("Times the sound will be repeated (nothing = unlimited)")
+            local times = tonumber(io.read()) or 999999
+            print("Delay between two sounds in second (nothing = no delay)")
+            local delay = tonumber(io.read()) or nil
+            print("Press *supp* to stop...")
+            parallel.wairForAny(waitForEchap, function() sound.playSoundMultipleTimes(noteBlock, soundID, times, delay, x, y, z, pitch, volume) end)
+        end
     end
 end
 
