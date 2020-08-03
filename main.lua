@@ -31,7 +31,8 @@ end
 local function loadConfig()
     if fs.exists("config") then
         conf = objectJSON.decodeFromFile("config")
-    else
+    end
+    if next(conf) == nil then
         print("Please enter computer coordinates :")
         while type(conf["x"]) ~= "number" do
             print("X :")
@@ -45,9 +46,6 @@ local function loadConfig()
             print("z :")
             conf["z"] = tonumber(io.read())
         end
-        conf["x"] = x
-        conf["y"] = y
-        conf["z"] = z
         objectJSON.encodeAndSavePretty("config", conf)
     end
 end
