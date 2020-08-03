@@ -11,8 +11,8 @@ local function actualizeDisplay()
         sound.displaySounds(filename, true)
     else
         sound.displaySounds(filename, false)
-        term.redirect(native)
     end
+    term.redirect(native)
 end
 
 local function waitForEchap()
