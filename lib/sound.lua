@@ -21,7 +21,14 @@ end
 -- returns sound ID corresponding to a sound name
 function getSoundID(filename, soundName)
     local sounds = objectJSON.decodeFromFile(filename)
-    return sounds[soundName]
+    local soundID = sounds[soundName]
+    if soundID == nil then
+        soundID = sounds[sting.upper(soundName)]
+    end
+    if soundID == nil then
+        soundID = sounds[sting.lower(soundName)]
+    end
+    return soundID
 end
 
 -- play a sound thanks to it's ID

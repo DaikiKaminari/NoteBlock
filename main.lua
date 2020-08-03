@@ -65,7 +65,7 @@ local function init()
 end
 
 --- FUNCTIONS ---
--- add a new sound to json file containing all the sounds with informations provided by user
+-- adds a new sound to json file containing all the sounds with informations provided by user
 local function addSound()
     print("Adding new sound, please specify :\nSound name : ")
     local soundName = io.read()
@@ -79,7 +79,7 @@ local function addSound()
     actualizeDisplay()
 end
 
--- delete a sound from json file containing all the sounds
+-- deletes a sound from json file containing all the sounds
 local function delSound()
     print("Deleting a sound, please specify :\nSound name : ")
     local soundName = io.read()
@@ -90,6 +90,16 @@ local function delSound()
         print("This sound does not exist.")
     end
     actualizeDisplay()
+end
+
+-- plays a sound and ask to repeat
+local function playSoundAndRepeat(noteBlock, soundID, x, y, z, pitch, volume)
+    local play
+    while not play do
+        sound.playSound(noteBlock, soundID, x, y, z, pitch, volume)
+        print("Play the sound again ? (enter nothing to repeat and anything to stop)")
+        play = io.read()
+    end
 end
 
 -- return delta vector bewteen user location and coordinates he enters
@@ -119,10 +129,10 @@ local function playSound(here)
         return
     end
     if here then
-        sound.playSound(noteBlock, soundID)
+        playSoundAndRepeat(noteBlock, soundID)
     else
         local x, y, z = getCoords()
-        sound.playSound(noteBlock, soundID, x, y, z)
+        playSoundAndRepeat(noteBlock, soundID, x, y, z)
     end
 end
 
@@ -148,10 +158,10 @@ local function playCustomSound(here)
     print("Pitch (0.0-2.0) : ")
     local pitch = tonumber(io.read())
     if here then
-        sound.playSound(noteBlock, soundID, 1, 1, 1, pitch, volume)
+        playSoundAndRepeat(noteBlock, soundID, 1, 1, 1, pitch, volume)
     else
         local x, y, z = getCoords()
-        sound.playSound(noteBlock, soundID, x, y, z, pitch, volume)
+        playSoundAndRepeat(noteBlock, soundID, x, y, z, pitch, volume)
     end
 end
 
@@ -163,7 +173,12 @@ local function parse(input)
     elseif string.upper(input) == "PLAY_HERE" then playSound(true)
     elseif string.upper(input) == "PLAY_CUSTOM" then playCustomSound(false)
     elseif string.upper(input) == "PLAY_CUSTOM_HERE" then playCustomSound(true)
-    elseif string.upper(input) == "DISPLAY" then actualizeDisplay()
+    elseif string.upper(input) == "DISPLAY" then
+        if monitor ~= nil then
+            actualizeDisplay(true)
+        else
+            actualizeDisplay()
+        end
     else
         print("Input not recognized as an instruction.")
         sleep(2)
