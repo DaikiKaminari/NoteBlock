@@ -81,6 +81,10 @@ end
 -- display all sounds
 function displaySounds(filename, oneByLine)
     local sounds = objectJSON.decodeFromFile(filename)
+    if next(sounds) == nil then
+        print("No sound registered yet.")
+        return
+    end
     local w, h = term.getSize()
     term.clear()
     if oneByLine then
@@ -88,9 +92,11 @@ function displaySounds(filename, oneByLine)
             print(k)
         end
     else
-        local line = sounds[1]
+        local line
         for k,_ in pairs(removekey(sounds, sounds[1])) do
-            if string.len(line .. k) + 3 <= w then
+            if line == nil then
+                line = k
+            elseif string.len(line .. k) + 3 <= w then
                 line = line .. " / " .. k
             else
                 print(line)

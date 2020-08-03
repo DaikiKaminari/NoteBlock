@@ -1,7 +1,7 @@
 local filename = "sounds"   -- string : name of .json file containing sound list
 local noteBlock             -- table : peripheral, note block
 local monitor               -- table : peripheral, display monitor
-local conf                  -- table : configuration (x,y,z coords of the computer)
+local conf = {}             -- table : configuration (x,y,z coords of the computer)
 
 --- UTILS ---
 local function actualizeDisplay()
