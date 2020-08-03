@@ -4,15 +4,16 @@ local monitor               -- table : peripheral, display monitor
 local conf = {}             -- table : configuration (x,y,z coords of the computer)
 
 --- UTILS ---
-local function actualizeDisplay()
-    local native = term.native()
-    if monitor ~= nil then
+local function actualizeDisplay(onMonitor)
+    term.clear()
+    if monitor ~= nil and onMonitor then
+        local native = term.native()
         term.redirect(monitor)
+        term.clear()
         sound.displaySounds(filename, true)
-    else
-        sound.displaySounds(filename, false)
+        term.redirect(native)
     end
-    term.redirect(native)
+    sound.displaySounds(filename, false)
 end
 
 local function waitForEchap()
@@ -68,36 +69,36 @@ local function init()
     end
     monitor = peripheral.find("monitor")
     if monitor ~= nil then
-        actualizeDisplay()
+        actualizeDisplay(true)
     end
 end
 
 --- FUNCTIONS ---
 -- adds a new sound to json file containing all the sounds with informations provided by user
 local function addSound()
-    print("Adding new sound, please specify :\nSound name : ")
+    print("\nAdding new sound, please specify :\n\nSound name : ")
     local soundName = io.read()
-    print("Sound ID : ")
+    print("\nSound ID : ")
     local soundID = io.read()
     if sound.addSound(filename, soundName, soundID) then
-        print("Sound [" .. soundName .. "] with ID [" .. soundID .. "] added to list.")
+        print("\nSound [" .. soundName .. "] with ID [" .. soundID .. "] added to list.")
     else
-        print("No new sound have been added.")
+        print("\nNo new sound have been added.")
     end
-    actualizeDisplay()
+    actualizeDisplay(true)
 end
 
 -- deletes a sound from json file containing all the sounds
 local function delSound()
-    print("Deleting a sound, please specify :\nSound name : ")
+    print("\nDeleting a sound, please specify :\n\nSound name : ")
     local soundName = io.read()
     local soundID = sound.delSound(filename, soundName)
     if soundID ~= nil then
-        print("Sound [" .. soundName .. "] which ID was [" .. soundID .. "] removed from list.")
+        print("\nSound [" .. soundName .. "] which ID was [" .. soundID .. "] removed from list.")
     else
-        print("This sound does not exist.")
+        print("\nThis sound does not exist.")
     end
-    actualizeDisplay()
+    actualizeDisplay(true)
 end
 
 -- plays a sound and ask to repeat
@@ -105,17 +106,17 @@ local function playSoundAndRepeat(noteBlock, soundID, x, y, z, pitch, volume)
     local play = ""
     while play == "" do
         sound.playSound(noteBlock, soundID, x, y, z, pitch, volume)
-        print("Play the sound again ?")
+        print("\nPlay the sound again ?")
         print(" - *nothing* : repeat the sound 1 time")
         print(" - spam : ask to repeat the sound multiple times")
         print(" - anything else will stop the program")
         play = io.read()
         if string.upper(play) == "SPAM" then
-            print("Times the sound will be repeated (nothing = unlimited)")
+            print("\nTimes the sound will be repeated (nothing = unlimited)")
             local times = tonumber(io.read()) or 999999
-            print("Delay between two sounds in second (nothing = no delay)")
+            print("\nDelay between two sounds in second (nothing = no delay)")
             local delay = tonumber(io.read()) or nil
-            print("Press *supp* to stop...")
+            print("\nPress *supp* to stop...")
             parallel.waitForAny(waitForEchap, function() sound.playSoundMultipleTimes(noteBlock, soundID, times, delay, x, y, z, pitch, volume) end)
         end
     end
@@ -123,7 +124,7 @@ end
 
 -- return delta vector bewteen user location and coordinates he enters
 local function getCoords()
-    print("Enter coordinates :")
+    print("\nEnter coordinates :")
     print("X : ")
     local x2 = tonumber(io.read())
     x2 = type(x2) == "number" and x2 or conf["x"]
@@ -138,9 +139,10 @@ end
 
 -- play a sound that is registered in json sound list
 local function playSound(here)
+    actualizeDisplay(true)
     local soundID
-    print("Playing a sound, please specify:")
-    print("Sound name : ")
+    print("\nPlaying a sound, please specify:")
+    print("\nSound name : ")
     local soundName = io.read()
     local soundID = sound.getSoundID(filename, soundName)
     if soundID == nil then
@@ -157,14 +159,15 @@ end
 
 -- play a sound registered in json sound list or with an ID, can specify each parameter
 local function playCustomSound(here)
-    print("Playing a sound, please specify:\nUsing ID (Y/N) ?")
+    actualizeDisplay(true)
+    print("\nPlaying a sound, please specify:\nUsing ID (Y/N) ?")
     local usingID = io.read()
     local soundID
     if string.upper(usingID) == "Y" then
-        print("SoundID : ")
+        print("\nSoundID : ")
         soundID = io.read()
     else
-        print("Sound name : ")
+        print("\nSound name : ")
         local soundName = io.read()
         local soundID = sound.getSoundID(filename, soundName)
         if soundID == nil then
@@ -172,9 +175,9 @@ local function playCustomSound(here)
             return
         end
     end
-    print("Volume (0-1000) : ")
+    print("\nVolume (0-1000) : ")
     local volume = tonumber(io.read())
-    print("Pitch (0.0-2.0) : ")
+    print("\nPitch (0.0-2.0) : ")
     local pitch = tonumber(io.read())
     if here then
         playSoundAndRepeat(noteBlock, soundID, 1, 1, 1, pitch, volume)
@@ -186,6 +189,7 @@ end
 
 -- parse the instructions and call the corresponding function
 local function parse(input)
+    term.clear()
     if string.upper(input) == "ADD" then addSound()
     elseif string.upper(input) == "DEL" then delSound()
     elseif string.upper(input) == "PLAY" then playSound(false)
@@ -195,8 +199,6 @@ local function parse(input)
     elseif string.upper(input) == "DISPLAY" then
         if monitor ~= nil then
             actualizeDisplay(true)
-        else
-            actualizeDisplay()
         end
     else
         print("Input not recognized as an instruction.")
