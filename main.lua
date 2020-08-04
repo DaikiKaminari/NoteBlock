@@ -89,6 +89,8 @@ local function addSound()
     else
         print("\nNo new sound have been added.")
     end
+    print("Press enter...")
+    io.read()
     actualizeDisplay(true)
 end
 
@@ -99,9 +101,13 @@ local function delSound()
     local soundID = sound.delSound(filename, soundName)
     if soundID ~= nil then
         print("\nSound [" .. soundName .. "] which ID was [" .. soundID .. "] removed from list.")
+        print("Press enter...")
+        io.read()
     else
         print("\nThis sound does not exist.")
     end
+    print("Press enter...")
+    io.read()
     actualizeDisplay(true)
 end
 
