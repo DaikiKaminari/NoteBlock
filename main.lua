@@ -55,8 +55,8 @@ local function loadConfig()
             print("Z :")
             conf["z"] = tonumber(io.read())
         end
-        while type(conf["radius"]) ~= "number" and type(conf["radius"]) < 0 do
-            print("\nMap radius :")
+        while type(conf["radius"]) ~= "number" or conf["radius"] < 0 do
+            print("\nMap radius (>= 0) :")
             conf["radius"] = tonumber(io.read())
         end
         objectJSON.encodeAndSavePretty("config", conf)
