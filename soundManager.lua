@@ -25,7 +25,7 @@ end
 
 --- FUNCTIONS ---
 -- adds a new sound to json file containing all the sounds with informations provided by user
-function addSound()
+function addSound(filename)
     print("\nAdding new sound, please specify :\n\nSound name : ")
     local soundName = io.read()
     print("\nSound ID : ")
@@ -40,7 +40,7 @@ function addSound()
 end
 
 -- deletes a sound from json file containing all the sounds
-function delSound()
+function delSound(filename)
     print("\nDeleting a sound, please specify :\n\nSound name : ")
     local soundName = io.read()
     local soundID = sound.delSound(filename, soundName)
@@ -92,7 +92,7 @@ local function getCoords()
 end
 
 -- play a sound that is registered in json sound list
-function playSound(here)
+function playSound(filename, here)
     local soundID
     print("\nPlaying a sound, please specify:")
     print("\nSound name : ")
@@ -111,7 +111,7 @@ function playSound(here)
 end
 
 -- play a sound registered in json sound list or with an ID, can specify each parameter
-function playCustomSound(here)
+function playCustomSound(filename, here)
     print('\nPlaying a sound, please specify:\nUsing ID (enter "y" for yes) ?')
     local usingID = io.read()
     local soundID
@@ -140,7 +140,7 @@ function playCustomSound(here)
 end
 
 -- plays the sound on the whole map
-function playSoundGlobally()
+function playSoundGlobally(filename)
     print("\nPlaying a sound, please specify:")
     print("\nSound name : ")
     local soundName = io.read()

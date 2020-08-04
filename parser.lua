@@ -8,13 +8,13 @@ end
 
 --- FUNCTIONS ---
 -- parses the instructions and call the corresponding function
-function parse(input)
-    if string.upper(input) == "ADD" then soundManager.addSound()
-    elseif string.upper(input) == "DEL" then soundManager.delSound()
-    elseif string.upper(input) == "PLAY" then soundManager.playSound(false)
-    elseif string.upper(input) == "PLAY_HERE" then soundManager.playSound(true)
-    elseif string.upper(input) == "PLAY_CUSTOM" then soundManager.playCustomSound(false)
-    elseif string.upper(input) == "PLAY_CUSTOM_HERE" then soundManager.playCustomSound(true)
+function parse(input, filename)
+    if string.upper(input) == "ADD" then soundManager.addSound(filename)
+    elseif string.upper(input) == "DEL" then soundManager.delSound(filename)
+    elseif string.upper(input) == "PLAY" then soundManager.playSound(filename, false)
+    elseif string.upper(input) == "PLAY_HERE" then soundManager.playSound(filename, true)
+    elseif string.upper(input) == "PLAY_CUSTOM" then soundManager.playCustomSound(filename, false)
+    elseif string.upper(input) == "PLAY_CUSTOM_HERE" then soundManager.playCustomSound(filename, true)
     elseif string.upper(input) == "PLAY_GLOBALLY" then soundManager.playSoundGlobally()
     elseif string.upper(input) == "DISPLAY" then
     else
