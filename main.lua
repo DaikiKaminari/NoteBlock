@@ -20,6 +20,7 @@ local function waitForEchap()
     local event, nbKey
     while event ~= "key" and nbKey ~= 211 do
         sleep(0)
+        event, nbKey = os.pullEvent()
     end
 end
 
@@ -198,7 +199,6 @@ end
 -- plays the sound on the whole map
 local function playSoundGlobally()
     actualizeDisplay(true)
-    local soundID
     print("\nPlaying a sound, please specify:")
     print("\nSound name : ")
     local soundName = io.read()

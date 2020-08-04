@@ -129,8 +129,8 @@ end
 function playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch)
     pitch = pitch or 1
     local volume = 4
-    for x0=16*volume, mapRadius*2, 16*volume*1.4 do
-        for z0=16*volume, mapRadius*2, 16*volume*1.4 do
+    for x0=16*volume-mapRadius, mapRadius*2, 16*volume*1.4 do
+        for z0=16*volume-mapRadius, mapRadius*2, 16*volume*1.4 do
             playSound(noteBlock, soundID, x0 - x, 100 - y, z0 - z, pitch, volume)
         end
     end
