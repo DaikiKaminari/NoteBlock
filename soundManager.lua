@@ -27,7 +27,7 @@ local function waitForEchap()
 end
 
 -- prints all registered sounds
-function actualizeDisplay(filename)
+function actualizeDisplay()
     term.clear()
     sound.displaySounds(filename, false)
 end
@@ -46,7 +46,7 @@ function addSound()
     end
     print("Press enter...")
     io.read()
-    actualizeDisplay(true)
+    actualizeDisplay()
 end
 
 -- deletes a sound from json file containing all the sounds
@@ -63,7 +63,7 @@ function delSound()
     end
     print("Press enter...")
     io.read()
-    actualizeDisplay(true)
+    actualizeDisplay()
 end
 
 -- plays a sound and ask to repeat
@@ -152,7 +152,7 @@ end
 
 -- plays the sound on the whole map
 function playSoundGlobally()
-    actualizeDisplay(true)
+    actualizeDisplay()
     print("\nPlaying a sound, please specify:")
     print("\nSound name : ")
     local soundName = io.read()

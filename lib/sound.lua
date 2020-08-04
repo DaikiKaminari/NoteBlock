@@ -18,6 +18,22 @@ local function removekey(tab, key)
 end
 
 --- FUNCTIONS ---
+-- returns sound ID corresponding to a sound name
+function getSoundID(filename, soundName)
+    if soundName == "" then
+        return nil
+    end
+    local sounds = objectJSON.decodeFromFile(filename)
+    local soundID = sounds[soundName]
+    if soundID == nil then
+        soundID = sounds[sting.upper(soundName)]
+    end
+    if soundID == nil then
+        soundID = sounds[sting.lower(soundName)]
+    end
+    return soundID
+end
+
 -- add a new sound to the list
 function addSound(filename, soundName, soundID)
     if soundName == nil then
@@ -48,22 +64,6 @@ function delSound(filename, soundName)
     local sounds = objectJSON.decodeFromFile(filename)
     local soundID = removekey(sounds, soundName)
     objectJSON.encodeAndSavePretty(filename, sounds)
-    return soundID
-end
-
--- returns sound ID corresponding to a sound name
-function getSoundID(filename, soundName)
-    if soundName == "" then
-        return nil
-    end
-    local sounds = objectJSON.decodeFromFile(filename)
-    local soundID = sounds[soundName]
-    if soundID == nil then
-        soundID = sounds[sting.upper(soundName)]
-    end
-    if soundID == nil then
-        soundID = sounds[sting.lower(soundName)]
-    end
     return soundID
 end
 

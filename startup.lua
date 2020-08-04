@@ -68,7 +68,7 @@ local function init()
     end
     monitor = peripheral.find("monitor")
     if monitor ~= nil then
-        soundManager.actualizeDisplay(true)
+        soundManager.actualizeDisplay()
     end
 end
 
@@ -89,7 +89,8 @@ local function main()
             print(" - " .. v)
         end
         input = io.read()
-        parser.parse(input, filename)
+        soundManager.actualizeDisplay()
+        parser.parse(input)
     end
 end
 

@@ -9,7 +9,6 @@ end
 --- FUNCTIONS ---
 -- parses the instructions and call the corresponding function
 function parse(input)
-    soundManager.actualizeDisplay(true)
     if string.upper(input) == "ADD" then soundManager.addSound()
     elseif string.upper(input) == "DEL" then soundManager.delSound()
     elseif string.upper(input) == "PLAY" then soundManager.playSound(false)
