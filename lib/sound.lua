@@ -53,6 +53,9 @@ end
 
 -- returns sound ID corresponding to a sound name
 function getSoundID(filename, soundName)
+    if soundName == "" then
+        return nil
+    end
     local sounds = objectJSON.decodeFromFile(filename)
     local soundID = sounds[soundName]
     if soundID == nil then
@@ -128,10 +131,9 @@ end
 -- plays a sound on the whole map
 function playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch)
     pitch = pitch or 1
-    local volume = 4
-    for x0=16*volume-mapRadius, mapRadius*2, 16*volume*1.4 do
-        for z0=16*volume-mapRadius, mapRadius*2, 16*volume*1.4 do
-            playSound(noteBlock, soundID, x0 - x, 100 - y, z0 - z, pitch, volume)
+    for x0=32-mapRadius, mapRadius, 64 do
+        for z0=32-mapRadius, mapRadius, 64 do
+            playSound(noteBlock, soundID, x0 - x, 100 - y, z0 - z, pitch, 100)
         end
     end
 end
