@@ -1,41 +1,25 @@
-local filename = "sounds"   -- string : name of .json file containing sound list
 local noteBlock             -- table : peripheral, note block
 local monitor               -- table : peripheral, display monitor
 local conf = {}             -- table : configuration (x,y,z coords of the computer)
 
---- UTILS ---
-local function actualizeDisplay(onMonitor)
-    term.clear()
-    if monitor ~= nil and onMonitor then
-        local native = term.native()
-        term.redirect(monitor)
-        term.clear()
-        sound.displaySounds(filename, true)
-        term.redirect(native)
-    end
-    sound.displaySounds(filename, false)
-end
-
-local function waitForEchap()
-    local event, nbKey
-    while event ~= "key" and nbKey ~= 211 do
-        sleep(0)
-        event, nbKey = os.pullEvent()
-    end
-end
-
 --- INIT ---
-local function loadAPIs()
-    if not fs.exists("lib/objectJSON") then
-        error("[lib/objectJSON] not found.")
+local function loadAPIs(apis)
+    for _,path in pairs(apis) do
+        if not fs.exists(path) then
+            error("API [" .. path .. "] does not exist.")
+        end
+        print("\nLoading API : [" .. path .. "]")
+        os.loadAPI(path)
     end
-    os.loadAPI("lib/objectJSON")
-    objectJSON.init()
-
-    if not fs.exists("lib/sound") then
-        error("[lib/sound] not found.")
+    for _,path in pairs(apis) do
+        local api
+        for v in path:gmatch("([^/]+)") do
+            api = v
+        end
+        if _G[api].init ~= nil then
+            _G[api].init()
+        end
     end
-    os.loadAPI("lib/sound")
 end
 
 local function loadConfig()
@@ -60,180 +44,38 @@ local function loadConfig()
             print("\nMap radius (>= 0) :")
             conf["radius"] = tonumber(io.read())
         end
+        print("\nMap center coordinates :")
+        while type(conf["nX0"]) ~= "number" do
+            print("\nX0 :")
+            conf["x0"] = tonumber(io.read())
+        end
+        while type(conf["nY0"]) ~= "number" do
+            print("\nY0 :")
+            conf["y0"] = tonumber(io.read())
+        end
+        while type(conf["nZ0"]) ~= "number" do
+            print("\nZ0 :")
+            conf["z0"] = tonumber(io.read())
+        end
         objectJSON.encodeAndSavePretty("config", conf)
     end
 end
 
 local function init()
-    if not fs.exists("sounds") then
-        error("[sounds] not found.")
-    end
     noteBlock = peripheral.find("note_block")
     if noteBlock == nil then
         error("NoteBlock peripheral not found.")
     end
     monitor = peripheral.find("monitor")
     if monitor ~= nil then
-        actualizeDisplay(true)
+        soundManager.actualizeDisplay(true)
     end
 end
 
---- FUNCTIONS ---
--- adds a new sound to json file containing all the sounds with informations provided by user
-local function addSound()
-    print("\nAdding new sound, please specify :\n\nSound name : ")
-    local soundName = io.read()
-    print("\nSound ID : ")
-    local soundID = io.read()
-    if sound.addSound(filename, soundName, soundID) then
-        print("\nSound [" .. soundName .. "] with ID [" .. soundID .. "] added to list.")
-    else
-        print("\nNo new sound have been added.")
-    end
-    print("Press enter...")
-    io.read()
-    actualizeDisplay(true)
-end
 
--- deletes a sound from json file containing all the sounds
-local function delSound()
-    print("\nDeleting a sound, please specify :\n\nSound name : ")
-    local soundName = io.read()
-    local soundID = sound.delSound(filename, soundName)
-    if soundID ~= nil then
-        print("\nSound [" .. soundName .. "] which ID was [" .. soundID .. "] removed from list.")
-        print("Press enter...")
-        io.read()
-    else
-        print("\nThis sound does not exist.")
-    end
-    print("Press enter...")
-    io.read()
-    actualizeDisplay(true)
-end
-
--- plays a sound and ask to repeat
-local function playSoundAndRepeat(noteBlock, soundID, dx, dy, dz, pitch, volume)
-    local play = ""
-    while play == "" do
-        sound.playSound(noteBlock, soundID, dx, dy, dz, pitch, volume)
-        print("\nPlay the sound again ?")
-        print(" - *nothing* : repeat the sound 1 time")
-        print(" - spam : ask to repeat the sound multiple times")
-        print(" - anything else will stop the program")
-        play = io.read()
-        if string.upper(play) == "SPAM" then
-            print("\nTimes the sound will be repeated (nothing = unlimited)")
-            local times = tonumber(io.read())
-            print("\nDelay between two sounds in second (nothing = no delay)")
-            local delay = tonumber(io.read())
-            print("\nPress *supp* to stop...")
-            parallel.waitForAny(waitForEchap, function() sound.playSoundMultipleTimes(noteBlock, soundID, times, delay, x, y, z, pitch, volume) end)
-        end
-    end
-end
-
--- return delta vector bewteen user location and coordinates he enters
-local function getCoords()
-    print("\nEnter coordinates :")
-    print("X : ")
-    local x = tonumber(io.read())
-    x = type(x) == "number" and x or conf["x"]
-    print("Y : ")
-    local y2 = tonumber(io.read())
-    y = type(y) == "number" and y or conf["y"]
-    print("Z : ")
-    local z = tonumber(io.read())
-    z = type(z) == "number" and z or conf["z"]
-    return x - conf["x"], y - conf["y"], z - conf["z"]
-end
-
--- play a sound that is registered in json sound list
-local function playSound(here)
-    local soundID
-    print("\nPlaying a sound, please specify:")
-    print("\nSound name : ")
-    local soundName = io.read()
-    local soundID = sound.getSoundID(filename, soundName)
-    if soundID == nil then
-        print("No sound matching this name.")
-        return
-    end
-    if here then
-        playSoundAndRepeat(noteBlock, soundID)
-    else
-        local dx, dy, dz = getCoords()
-        playSoundAndRepeat(noteBlock, soundID, dx, dy, dz)
-    end
-end
-
--- play a sound registered in json sound list or with an ID, can specify each parameter
-local function playCustomSound(here)
-    print('\nPlaying a sound, please specify:\nUsing ID (enter "y" for yes) ?')
-    local usingID = io.read()
-    local soundID
-    if string.upper(usingID) == "Y" then
-        print("\nSoundID : ")
-        soundID = io.read()
-    else
-        print("\nSound name : ")
-        local soundName = io.read()
-        soundID = sound.getSoundID(filename, soundName)
-        if soundID == nil then
-            print("No sound matching this name.")
-            return
-        end
-    end
-    print("\nVolume (0-1000) : ")
-    local volume = tonumber(io.read())
-    print("\nPitch (0.0-2.0) : ")
-    local pitch = tonumber(io.read())
-    if here then
-        playSoundAndRepeat(noteBlock, soundID, 0, 0, 0, pitch, volume)
-    else
-        local dx, dy, dz = getCoords()
-        playSoundAndRepeat(noteBlock, soundID, dx, dy, dz, pitch, volume)
-    end
-end
-
--- plays the sound on the whole map
-local function playSoundGlobally()
-    actualizeDisplay(true)
-    print("\nPlaying a sound, please specify:")
-    print("\nSound name : ")
-    local soundName = io.read()
-    local soundID = sound.getSoundID(filename, soundName)
-    if soundID == nil then
-        print("No sound matching this name.")
-        return
-    end
-    print("\nPitch (0.0-2.0) : ")
-    local pitch = tonumber(io.read())
-    sound.playSoundGlobally(noteBlock, soundID, conf["radius"], conf["x"], conf["y"], conf["z"], pitch)
-end
-
--- parses the instructions and call the corresponding function
-local function parse(input)
-    actualizeDisplay(true)
-    if string.upper(input) == "ADD" then addSound()
-    elseif string.upper(input) == "DEL" then delSound()
-    elseif string.upper(input) == "PLAY" then playSound(false)
-    elseif string.upper(input) == "PLAY_HERE" then playSound(true)
-    elseif string.upper(input) == "PLAY_CUSTOM" then playCustomSound(false)
-    elseif string.upper(input) == "PLAY_CUSTOM_HERE" then playCustomSound(true)
-    elseif string.upper(input) == "PLAY_GLOBALLY" then playSoundGlobally()
-    elseif string.upper(input) == "DISPLAY" then
-        if monitor ~= nil then
-            actualizeDisplay(true)
-        end
-    else
-        print("Input not recognized as an instruction.")
-        sleep(2)
-    end
-end
-
+--- MAIN CALL ---
 local function main()
-    loadAPIs()
+    loadAPIs({"lib/objectJSON", "soundManager", "parser"})
     loadConfig()
     init()
     local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "PLAY_GLOBALLY", "DISPLAY"}
@@ -247,7 +89,7 @@ local function main()
             print(" - " .. v)
         end
         input = io.read()
-        parse(input)
+        parser.parse(input, filename)
     end
 end
 
