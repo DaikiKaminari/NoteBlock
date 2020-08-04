@@ -92,7 +92,7 @@ local function getCoords()
 end
 
 -- play a sound that is registered in json sound list
-function playSound(filename, here)
+function playSound(filename, noteBlock, here)
     local soundID
     print("\nPlaying a sound, please specify:")
     print("\nSound name : ")
@@ -111,7 +111,7 @@ function playSound(filename, here)
 end
 
 -- play a sound registered in json sound list or with an ID, can specify each parameter
-function playCustomSound(filename, here)
+function playCustomSound(filename, noteBlock, here)
     print('\nPlaying a sound, please specify:\nUsing ID (enter "y" for yes) ?')
     local usingID = io.read()
     local soundID
@@ -140,7 +140,7 @@ function playCustomSound(filename, here)
 end
 
 -- plays the sound on the whole map
-function playSoundGlobally(filename)
+function playSoundGlobally(filename, noteBlock)
     print("\nPlaying a sound, please specify:")
     print("\nSound name : ")
     local soundName = io.read()

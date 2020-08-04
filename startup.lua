@@ -98,7 +98,7 @@ local function main()
         end
         input = io.read()
         actualizeDisplay()
-        parser.parse(filename, input)
+        parser.parse(filename, noteBlock, input)
     end
 end
 

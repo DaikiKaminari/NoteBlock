@@ -8,14 +8,14 @@ end
 
 --- FUNCTIONS ---
 -- parses the instructions and call the corresponding function
-function parse(input, filename)
+function parse(filename, noteBlock, input)
     if string.upper(input) == "ADD" then soundManager.addSound(filename)
     elseif string.upper(input) == "DEL" then soundManager.delSound(filename)
-    elseif string.upper(input) == "PLAY" then soundManager.playSound(filename, false)
-    elseif string.upper(input) == "PLAY_HERE" then soundManager.playSound(filename, true)
-    elseif string.upper(input) == "PLAY_CUSTOM" then soundManager.playCustomSound(filename, false)
-    elseif string.upper(input) == "PLAY_CUSTOM_HERE" then soundManager.playCustomSound(filename, true)
-    elseif string.upper(input) == "PLAY_GLOBALLY" then soundManager.playSoundGlobally()
+    elseif string.upper(input) == "PLAY" then soundManager.playSound(filename, noteBlock, false)
+    elseif string.upper(input) == "PLAY_HERE" then soundManager.playSound(filename, noteBlock, true)
+    elseif string.upper(input) == "PLAY_CUSTOM" then soundManager.playCustomSound(filename, noteBlock, false)
+    elseif string.upper(input) == "PLAY_CUSTOM_HERE" then soundManager.playCustomSound(filename, noteBlock, true)
+    elseif string.upper(input) == "PLAY_GLOBALLY" then soundManager.playSoundGlobally(filename, noteBlock)
     elseif string.upper(input) == "DISPLAY" then
     else
         print("Input not recognized as an instruction.")
