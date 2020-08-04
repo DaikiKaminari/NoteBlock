@@ -1,8 +1,5 @@
-local filename      -- string : json file where sounds will be registered
-
 --- INIT ---
 function init()
-    filename = "sounds"
     if not fs.exists("lib/objectJSON") then
         error("[lib/objectJSON] not found.")
     end
@@ -26,12 +23,6 @@ local function waitForEchap()
     end
 end
 
--- prints all registered sounds
-function actualizeDisplay()
-    term.clear()
-    sound.displaySounds(filename, false)
-end
-
 --- FUNCTIONS ---
 -- adds a new sound to json file containing all the sounds with informations provided by user
 function addSound()
@@ -46,7 +37,6 @@ function addSound()
     end
     print("Press enter...")
     io.read()
-    actualizeDisplay()
 end
 
 -- deletes a sound from json file containing all the sounds
@@ -63,7 +53,6 @@ function delSound()
     end
     print("Press enter...")
     io.read()
-    actualizeDisplay()
 end
 
 -- plays a sound and ask to repeat
@@ -152,7 +141,6 @@ end
 
 -- plays the sound on the whole map
 function playSoundGlobally()
-    actualizeDisplay()
     print("\nPlaying a sound, please specify:")
     print("\nSound name : ")
     local soundName = io.read()

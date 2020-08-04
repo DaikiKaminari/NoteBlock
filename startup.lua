@@ -1,3 +1,4 @@
+local filename = "sounds"   -- string : json file where sounds will be registered
 local noteBlock             -- table : peripheral, note block
 local monitor               -- table : peripheral, display monitor
 local conf = {}             -- table : configuration (x,y,z coords of the computer)
@@ -70,6 +71,13 @@ local function init()
     if monitor ~= nil then
         soundManager.actualizeDisplay()
     end
+end
+
+--- FUNCTIONS ---
+-- prints all registered sounds
+function actualizeDisplay()
+    term.clear()
+    sound.displaySounds(filename, false)
 end
 
 
