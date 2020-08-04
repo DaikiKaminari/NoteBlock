@@ -143,7 +143,6 @@ end
 
 -- play a sound that is registered in json sound list
 local function playSound(here)
-    actualizeDisplay(true)
     local soundID
     print("\nPlaying a sound, please specify:")
     print("\nSound name : ")
@@ -163,7 +162,6 @@ end
 
 -- play a sound registered in json sound list or with an ID, can specify each parameter
 local function playCustomSound(here)
-    actualizeDisplay(true)
     print('\nPlaying a sound, please specify:\nUsing ID (enter "y" for yes) ?')
     local usingID = io.read()
     local soundID
@@ -210,7 +208,7 @@ end
 
 -- parses the instructions and call the corresponding function
 local function parse(input)
-    term.clear()
+    actualizeDisplay(true)
     if string.upper(input) == "ADD" then addSound()
     elseif string.upper(input) == "DEL" then delSound()
     elseif string.upper(input) == "PLAY" then playSound(false)
