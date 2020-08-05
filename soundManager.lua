@@ -81,7 +81,7 @@ local function playSoundAndRepeat(isGlobal, noteBlock, soundID, dx, dy, dz, pitc
             if isGlobal then
                 parallel.waitForAny(waitForEchap, function() sound.playSoundMultipleTimes(noteBlock, soundID, times, delay, dx, dy, dz, pitch, volume) end)
             else
-                parallel.waitForAny(waitForEchap, function() sound.playGlobalSoundMultipleTimes(noteBlock, soundID, times, delay, dx, dy, dz, pitch, volume, mapRadius) end)
+                parallel.waitForAny(waitForEchap, function() sound.playGlobalSoundMultipleTimes(noteBlock, soundID, times, delay, mapRadius, dx, dy, dz, pitch, volume) end)
             end
         end
     end

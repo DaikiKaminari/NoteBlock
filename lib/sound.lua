@@ -139,7 +139,7 @@ function playSoundMultipleTimes(noteBlock, soundID, times, delay, dX, dY, dZ, pi
 end
 
 -- plays a sound on the whole map multiple times
-function playGlobalSoundMultipleTimes(noteBlock, soundID, times, delay, x, y, z, pitch, mapRadius)
+function playGlobalSoundMultipleTimes(noteBlock, soundID, times, delay, mapRadius, x, y, z, pitch)
     delay = delay or 0.2
     mapRadius = mapRadius or 5000
     while not times or times > 0 do
