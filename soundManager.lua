@@ -1,3 +1,5 @@
+local conf = {}             -- table : configuration (x,y,z coords of the computer)
+
 --- INIT ---
 function init()
     if not fs.exists("lib/objectJSON") then
@@ -10,6 +12,7 @@ function init()
         error("[lib/sound] not found.")
     end
     os.loadAPI("lib/sound")
+    conf = objectJSON.decodeFromFile("config")
 end
 
 
@@ -56,10 +59,14 @@ function delSound(filename)
 end
 
 -- plays a sound and ask to repeat
-local function playSoundAndRepeat(noteBlock, soundID, dx, dy, dz, pitch, volume)
+local function playSoundAndRepeat(isGlobal, noteBlock, soundID, dx, dy, dz, pitch, volume, mapRadius)
     local play = ""
     while play == "" do
-        sound.playSound(noteBlock, soundID, dx, dy, dz, pitch, volume)
+        if isGlobal then
+            sound.playSoundGlobally(noteBlock, soundID, conf["radius"], conf["x"], conf["y"], conf["z"], pitch)
+        else
+            sound.playSound(noteBlock, soundID, dx, dy, dz, pitch, volume)
+        end
         print("\nPlay the sound again ?")
         print(" - *nothing* : repeat the sound 1 time")
         print(" - spam : ask to repeat the sound multiple times")
@@ -71,7 +78,11 @@ local function playSoundAndRepeat(noteBlock, soundID, dx, dy, dz, pitch, volume)
             print("\nDelay between two sounds in second (nothing = no delay)")
             local delay = tonumber(io.read())
             print("\nPress *supp* to stop...")
-            parallel.waitForAny(waitForEchap, function() sound.playSoundMultipleTimes(noteBlock, soundID, times, delay, x, y, z, pitch, volume) end)
+            if isGlobal then
+                parallel.waitForAny(waitForEchap, function() sound.playSoundMultipleTimes(noteBlock, soundID, times, delay, dx, dy, dz, pitch, volume) end)
+            else
+                parallel.waitForAny(waitForEchap, function() sound.playGlobalSoundMultipleTimes(noteBlock, soundID, times, delay, dx, dy, dz, pitch, volume, mapRadius) end)
+            end
         end
     end
 end
@@ -103,10 +114,10 @@ function playSound(filename, noteBlock, here)
         return
     end
     if here then
-        playSoundAndRepeat(noteBlock, soundID)
+        playSoundAndRepeat(false, noteBlock, soundID)
     else
         local dx, dy, dz = getCoords()
-        playSoundAndRepeat(noteBlock, soundID, dx, dy, dz)
+        playSoundAndRepeat(false, noteBlock, soundID, dx, dy, dz)
     end
 end
 
@@ -132,10 +143,10 @@ function playCustomSound(filename, noteBlock, here)
     print("\nPitch (0.0-2.0) : ")
     local pitch = tonumber(io.read())
     if here then
-        playSoundAndRepeat(noteBlock, soundID, 0, 0, 0, pitch, volume)
+        playSoundAndRepeat(false, noteBlock, soundID, 0, 0, 0, pitch, volume)
     else
         local dx, dy, dz = getCoords()
-        playSoundAndRepeat(noteBlock, soundID, dx, dy, dz, pitch, volume)
+        playSoundAndRepeat(false, noteBlock, soundID, dx, dy, dz, pitch, volume)
     end
 end
 
@@ -151,5 +162,5 @@ function playSoundGlobally(filename, noteBlock)
     end
     print("\nPitch (0.0-2.0) : ")
     local pitch = tonumber(io.read())
-    sound.playSoundGlobally(noteBlock, soundID, conf["radius"], conf["x"], conf["y"], conf["z"], pitch)
+    playSoundAndRepeat(true, noteBlock, soundID)
 end

@@ -16,7 +16,7 @@ function parse(filename, noteBlock, input)
     elseif string.upper(input) == "PLAY_CUSTOM" then soundManager.playCustomSound(filename, noteBlock, false)
     elseif string.upper(input) == "PLAY_CUSTOM_HERE" then soundManager.playCustomSound(filename, noteBlock, true)
     elseif string.upper(input) == "PLAY_GLOBALLY" then soundManager.playSoundGlobally(filename, noteBlock)
-    elseif string.upper(input) == "DISPLAY" then
+    elseif string.upper(input) == "RESET_CONFIG" then fs.delete("config") os.reboot()
     else
         print("Input not recognized as an instruction.")
         sleep(2)

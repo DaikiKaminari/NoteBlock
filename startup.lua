@@ -28,7 +28,7 @@ local function loadConfig()
         conf = objectJSON.decodeFromFile("config")
     end
     if next(conf) == nil then
-        print("\nPlease enter computer coordinates :")
+        print("\nPlease enter note block coordinates :")
         while type(conf["x"]) ~= "number" do
             print("X :")
             conf["x"] = tonumber(io.read())
@@ -86,7 +86,7 @@ local function main()
     loadAPIs({"lib/objectJSON", "soundManager", "parser"})
     loadConfig()
     init()
-    local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "PLAY_GLOBALLY", "DISPLAY"}
+    local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "PLAY_GLOBALLY", "RESET_CONFIG"}
     local input = ""
     while true do
         if string.upper(input) ~= "DISPLAY" then

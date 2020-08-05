@@ -119,6 +119,16 @@ function playSound(noteBlock, soundID, dX, dY, dZ, pitch, volume)
     end
 end
 
+-- plays a sound on the whole map
+function playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch)
+    pitch = pitch or 1
+    for x0=32-mapRadius, mapRadius, 64 do
+        for z0=32-mapRadius, mapRadius, 64 do
+            playSound(noteBlock, soundID, x0 - x, 100 - y, z0 - z, pitch, 100)
+        end
+    end
+end
+
 -- plays a sound multiple times
 function playSoundMultipleTimes(noteBlock, soundID, times, delay, dX, dY, dZ, pitch, volume)
     delay = delay or 0.2
@@ -128,12 +138,12 @@ function playSoundMultipleTimes(noteBlock, soundID, times, delay, dX, dY, dZ, pi
     end
 end
 
--- plays a sound on the whole map
-function playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch)
-    pitch = pitch or 1
-    for x0=32-mapRadius, mapRadius, 64 do
-        for z0=32-mapRadius, mapRadius, 64 do
-            playSound(noteBlock, soundID, x0 - x, 100 - y, z0 - z, pitch, 100)
-        end
+-- plays a sound on the whole map multiple times
+function playGlobalSoundMultipleTimes(noteBlock, soundID, times, delay, x, y, z, pitch, mapRadius)
+    delay = delay or 0.2
+    mapRadius = mapRadius or 5000
+    while not times or times > 0 do
+        playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch)
+        sleep(delay)
     end
 end
