@@ -121,10 +121,6 @@ end
 
 -- plays a sound on the whole map
 function playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch)
-    print(type(mapRadius))
-    print(mapRadius)
-    print(32-mapRadius)
-    error("stop")
     pitch = pitch or 1
     for x0=32-mapRadius, mapRadius, 64 do
         for z0=32-mapRadius, mapRadius, 64 do

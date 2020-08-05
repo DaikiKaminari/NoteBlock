@@ -59,7 +59,7 @@ function delSound(filename)
 end
 
 -- plays a sound and ask to repeat
-local function playSoundAndRepeat(isGlobal, noteBlock, soundID, dx, dy, dz, pitch, volume, mapRadius)
+local function playSoundAndRepeat(isGlobal, noteBlock, soundID, dx, dy, dz, pitch, volume)
     local play = ""
     while play == "" do
         if isGlobal then
@@ -81,7 +81,7 @@ local function playSoundAndRepeat(isGlobal, noteBlock, soundID, dx, dy, dz, pitc
             if isGlobal then
                 parallel.waitForAny(waitForEchap, function() sound.playSoundMultipleTimes(noteBlock, soundID, times, delay, dx, dy, dz, pitch, volume) end)
             else
-                parallel.waitForAny(waitForEchap, function() sound.playGlobalSoundMultipleTimes(noteBlock, soundID, times, delay, mapRadius, dx, dy, dz, pitch, volume) end)
+                parallel.waitForAny(waitForEchap, function() sound.playGlobalSoundMultipleTimes(noteBlock, soundID, times, delay, conf["radius"], conf["x"], conf["y"], conf["z"], pitch, volume) end)
             end
         end
     end
