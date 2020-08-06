@@ -1,4 +1,4 @@
--- [V1.3]
+-- [V1.31]
 --- INIT ---
 function init()
 	print("\n--- INIT objectJSON ---")
@@ -29,6 +29,9 @@ end
 function decodeFromFile(filename)
 	if filename == nil then
 		error("filename cannot be nil.")
+	end
+	if not fs.exists(filename) then
+		error("[" .. filename .. "] not found.")
 	end
 	return json.decodeFromFile(filename)
 end

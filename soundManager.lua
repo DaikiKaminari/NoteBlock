@@ -12,7 +12,9 @@ function init()
         error("[lib/sound] not found.")
     end
     os.loadAPI("lib/sound")
-    conf = objectJSON.decodeFromFile("config")
+    if fs.exists("config") then
+        conf = objectJSON.decodeFromFile("config")
+    end
 end
 
 
