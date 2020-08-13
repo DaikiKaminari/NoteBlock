@@ -167,17 +167,16 @@ function playSoundGlobally(filename, noteBlock)
     playSoundAndRepeat(true, noteBlock, soundID)
 end
 
-local function testSoundCore(noteBlock)
+-- plays a sound once and where the computer is asking only the ID of the sound
+function testSound(noteBlock)
+    print('\nEnter "stop" to stop.')
     local soundID
     while true do
         print("\nEnter sound ID :")
         soundID = io.read()
+        if string.upper(soundID) == "STOP" then
+            return
+        end
         sound.playSound(noteBlock, soundID, 1, 4)
     end
-end
-
--- plays a sound once and where the computer is asking only the ID of the sound
-function testSound(noteBlock)
-    print("\nPress *supp* to stop...")
-    parallel.waitForAny(function() testSoundCore(noteBlock) end, waitForEchap)
 end
