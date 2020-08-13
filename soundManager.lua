@@ -81,9 +81,9 @@ local function playSoundAndRepeat(isGlobal, noteBlock, soundID, dx, dy, dz, pitc
             local delay = tonumber(io.read())
             print("\nPress *supp* to stop...")
             if isGlobal then
-                parallel.waitForAny(waitForEchap, function() sound.playSoundMultipleTimes(noteBlock, soundID, times, delay, dx, dy, dz, pitch, volume) end)
-            else
                 parallel.waitForAny(waitForEchap, function() sound.playGlobalSoundMultipleTimes(noteBlock, soundID, times, delay, conf["radius"], conf["x"], conf["y"], conf["z"], pitch, volume) end)
+            else
+                parallel.waitForAny(waitForEchap, function() sound.playSoundMultipleTimes(noteBlock, soundID, times, delay, dx, dy, dz, pitch, volume) end)
             end
         end
     end
