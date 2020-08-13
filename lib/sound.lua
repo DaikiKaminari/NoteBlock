@@ -76,19 +76,24 @@ function displaySounds(filename, oneByLine)
         print("No sound registered yet.")
         return
     end
+    local soundNames = {}
+    for name,_ in sounds do
+        soundNames[#soundNames] = soundNames
+    end
+    table.sort(soundNames)
     local w, h = term.getSize()
     term.clear()
     if oneByLine then
-        for k,_ in pairs(sounds) do
-            print(k)
+        for _,name in ipairs(soundNames) do
+            print(name .. " - " .. sounds[name])
         end
     else
         local line
-        for k,_ in pairs(sounds) do
+        for _,name in ipairs(sounds) do
             if line == nil then
-                line = k
-            elseif string.len(line .. k) + 3 <= w then
-                line = line .. " / " .. k
+                line = name
+            elseif string.len(line .. name) + 3 <= w then
+                line = line .. " / " .. name
             else
                 print(line)
                 line = ""
