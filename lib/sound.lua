@@ -22,7 +22,7 @@ end
 --- FUNCTIONS ---
 -- returns sound ID corresponding to a sound name
 function getSoundID(filename, soundName)
-    if soundName == "" then
+    if soundName == "" or soundName == nil then
         return nil
     end
     local sounds = objectJSON.decodeFromFile(filename)
@@ -112,7 +112,7 @@ function playSound(noteBlock, soundID, dX, dY, dZ, pitch, volume)
         pitch = 1 
     end
     if volume == nil then
-        volume = 5
+        volume = 1000
     end
     if dX == nil then
         noteBlock.playSound(soundID, pitch, volume)
@@ -133,7 +133,9 @@ function playSoundGlobally(noteBlock, soundID, mapRadius, x0, y0, z0, pitch)
     pitch = pitch or 1
     for xTarget=32-mapRadius, mapRadius, 64 do
         for zTarget=32-mapRadius, mapRadius, 64 do
-            playSound(noteBlock, soundID, xTarget - x0, 100 - y0, zTarget - z0, pitch, 100)
+            for yTarget=36, 220, 72 do
+                playSound(noteBlock, soundID, xTarget - x0, yTarget - y0, zTarget - z0, pitch, 1000)
+            end
         end
     end
 end

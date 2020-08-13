@@ -63,10 +63,6 @@ local function playSoundAndRepeat(isGlobal, noteBlock, soundID, dx, dy, dz, pitc
     local play = ""
     while play == "" do
         if isGlobal then
-            print(textutils.serialise(conf))
-            print(conf["x"])
-            print(conf["y"])
-            print(conf["z"])
             sound.playSoundGlobally(noteBlock, soundID, conf["radius"], conf["x"], conf["y"], conf["z"], pitch)
         else
             sound.playSound(noteBlock, soundID, dx, dy, dz, pitch, volume)
