@@ -12,16 +12,6 @@ local function loadAPIs(apis)
         print("\nLoading API : [" .. path .. "]")
         os.loadAPI(path)
     end
-    for _,path in pairs(apis) do
-        local api
-        for v in path:gmatch("([^/]+)") do
-            api = v
-        end
-        if _G[api].init ~= nil then
-            _G[api].init()
-        end
-        print()
-    end
 end
 
 local function loadConfig()
@@ -63,7 +53,10 @@ local function loadConfig()
     end
 end
 
-local function init()
+local function init(apis)
+    --load APIs
+    loadAPIs(apis)
+    -- initialize global variables and peripherals
     noteBlock = peripheral.find("note_block")
     if noteBlock == nil then
         error("NoteBlock peripheral not found.")
@@ -72,6 +65,17 @@ local function init()
     if monitor ~= nil then
         actualizeDisplay()
     end
+    -- run init() for each API
+    for _,path in pairs(apis) do
+        local api
+        for v in path:gmatch("([^/]+)") do
+            api = v
+        end
+        if _G[api].init ~= nil then
+            _G[api].init()
+        end
+    end
+    loadConfig()
 end
 
 --- FUNCTIONS ---
@@ -84,9 +88,7 @@ end
 
 --- MAIN CALL ---
 local function main()
-    loadConfig()
-    loadAPIs({"lib/objectJSON", "soundManager", "parser"})
-    init()
+    init({"lib/objectJSON", "soundManager", "parser"})
     local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "PLAY_GLOBALLY", "RESET_CONFIG"}
     local input = ""
     while true do
