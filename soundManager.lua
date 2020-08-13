@@ -19,9 +19,12 @@ end
 -- stop when supp key is pressed
 local function waitForEchap()
     local event, nbKey
-    while event ~= "key" and nbKey ~= 211 do
-        sleep(0)
+    while true do
         event, nbKey = os.pullEvent()
+        if event == "key" and nbKey = 211 then
+            return
+        end
+        sleep(0)
     end
 end
 
@@ -175,6 +178,6 @@ end
 
 -- plays a sound once and where the computer is asking only the ID of the sound
 function testSound(noteBlock)
-    print("Press *supp* to stop...")
+    print("\nPress *supp* to stop...")
     parallel.waitForAny(function() testSoundCore(noteBlock) end, waitForEchap)
 end

@@ -94,15 +94,14 @@ local function main()
     local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "PLAY_GLOBALLY", "TEST_SOUND", "RESET_CONFIG"}
     local input = ""
     while true do
-        if string.upper(input) ~= "DISPLAY" then
-            term.clear()
-        end
         print("\nWaiting for an instruction...")
         for _,v in pairs(inst) do
             print(" - " .. v)
         end
         input = io.read()
-        actualizeDisplay()
+        if string.upper(input) ~= "TEST_SOUND" then
+            actualizeDisplay()
+        end
         parser.parse(filename, noteBlock, input)
     end
 end
