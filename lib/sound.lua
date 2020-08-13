@@ -125,7 +125,7 @@ function playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch)
         error("[soundID] cannot be nil or empty : " .. tostring(soundID))
     end
     if mapRadius == nil or x == nil or y == nil or z == nil then
-        print("[mapRadius], [x], [y], [z] cannot be nil : ", ", ", tostring(mapRadius), ", ",
+        print("[mapRadius], [x], [y], [z] cannot be nil : ", tostring(mapRadius), ", ",
         tostring(x), ", ", tostring(y), ", ", tostring(z))
     end
     pitch = pitch or 1
@@ -151,6 +151,7 @@ function playGlobalSoundMultipleTimes(noteBlock, soundID, times, delay, mapRadiu
     mapRadius = mapRadius or 5000
     while not times or times > 0 do
         playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch)
+        times = times - 1
         sleep(delay)
     end
 end

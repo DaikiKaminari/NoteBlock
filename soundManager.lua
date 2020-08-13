@@ -3,16 +3,18 @@ local conf = {}             -- table : configuration (x,y,z coords of the comput
 --- INIT ---
 function init()
     if not fs.exists("lib/objectJSON") then
-        error("[lib/objectJSON] not found.")
+        error("[lib/objectJSON] file not found.")
     end
     os.loadAPI("lib/objectJSON")
     objectJSON.init()
 
     if not fs.exists("lib/sound") then
-        error("[lib/sound] not found.")
+        error("[lib/sound] file not found.")
     end
     os.loadAPI("lib/sound")
-    if fs.exists("config") then
+    if not fs.exists("config") then
+        error("[config] file not found.")
+    else
         conf = objectJSON.decodeFromFile("config")
     end
 end

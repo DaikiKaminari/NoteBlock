@@ -83,8 +83,8 @@ end
 
 --- MAIN CALL ---
 local function main()
-    loadAPIs({"lib/objectJSON", "soundManager", "parser"})
     loadConfig()
+    loadAPIs({"lib/objectJSON", "soundManager", "parser"})
     init()
     local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "PLAY_GLOBALLY", "RESET_CONFIG"}
     local input = ""
