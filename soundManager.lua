@@ -64,6 +64,8 @@ end
 
 -- plays a sound and ask to repeat
 local function playSoundAndRepeat(isGlobal, noteBlock, soundID, dx, dy, dz, pitch, volume)
+    print(conf)
+    print(textutils.serialise(conf))
     local play = ""
     while play == "" do
         if isGlobal then
