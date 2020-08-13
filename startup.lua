@@ -90,7 +90,7 @@ end
 --- MAIN CALL ---
 local function main()
     init({"lib/sound", "soundManager", "parser"})
-    local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "PLAY_GLOBALLY", "RESET_CONFIG"}
+    local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "PLAY_GLOBALLY", "TEST_SOUND", "RESET_CONFIG"}
     local input = ""
     while true do
         if string.upper(input) ~= "DISPLAY" then
