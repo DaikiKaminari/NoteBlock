@@ -122,7 +122,7 @@ function playSound(noteBlock, soundID, dX, dY, dZ, pitch, volume)
 end
 
 -- plays a sound on the whole map
-function playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch)
+function playSoundGlobally(noteBlock, soundID, mapRadius, x0, y0, z0, pitch)
     if soundID == nil or soundID == "" then
         error("soundID cannot be nil or empty : " .. tostring(soundID))
     end
@@ -131,9 +131,9 @@ function playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch)
         tostring(x), ", ", tostring(y), ", ", tostring(z))
     end
     pitch = pitch or 1
-    for x0=32-mapRadius, mapRadius*2, 64 do
-        for z0=32-mapRadius, mapRadius*2, 64 do
-            playSound(noteBlock, soundID, x0 - x, 100 - y, z0 - z, pitch, 100)
+    for x=32-mapRadius, mapRadius, 64 do
+        for z=32-mapRadius, mapRadius, 64 do
+            playSound(noteBlock, soundID, x - x0, 100 - y0, z - z0, pitch, 100)
         end
     end
 end
@@ -148,11 +148,11 @@ function playSoundMultipleTimes(noteBlock, soundID, times, delay, dX, dY, dZ, pi
 end
 
 -- plays a sound on the whole map multiple times
-function playGlobalSoundMultipleTimes(noteBlock, soundID, times, delay, mapRadius, x, y, z, pitch)
+function playGlobalSoundMultipleTimes(noteBlock, soundID, times, delay, mapRadius, x0, y0, z0, pitch)
     delay = delay or 0.2
     mapRadius = mapRadius or 5000
     while not times or times > 0 do
-        playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch)
+        playSoundGlobally(noteBlock, soundID, mapRadius, x0, y0, z0, pitch)
         if times then
             times = times - 1
         end
