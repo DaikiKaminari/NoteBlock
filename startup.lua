@@ -14,13 +14,18 @@ local function loadAPIs(apis)
     end
     for _,path in pairs(apis) do
         local api
+        print("PATH : " .. path)
         for v in path:gmatch("([^/]+)") do
             api = v
         end
+        print("API : " .. api)
+        print("INIT? : " .. tostring(_G[api].init))
         if _G[api].init ~= nil then
             _G[api].init()
         end
+        print()
     end
+    error("stop")
 end
 
 local function loadConfig()

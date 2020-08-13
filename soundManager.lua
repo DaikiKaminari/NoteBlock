@@ -1,4 +1,4 @@
-local conf = {}             -- table : configuration (x,y,z coords of the computer)
+local conf = {}             -- table : configuration
 
 --- INIT ---
 function init()
