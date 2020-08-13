@@ -48,8 +48,6 @@ function delSound(filename)
     local soundID = sound.delSound(filename, soundName)
     if soundID ~= nil then
         print("\nSound [" .. soundName .. "] which ID was [" .. soundID .. "] removed from list.")
-        print("Press enter...")
-        io.read()
     else
         print("\nThis sound does not exist.")
     end
