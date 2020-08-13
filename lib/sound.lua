@@ -121,6 +121,13 @@ end
 
 -- plays a sound on the whole map
 function playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch)
+    if soundID == nil or soundID == "" then
+        error("[soundID] cannot be nil or empty : " .. tostring(soundID))
+    end
+    if mapRadius == nil or x == nil or y == nil or z == nil then
+        print("[mapRadius], [x], [y], [z] cannot be nil : ", ", ", tostring(mapRadius), ", ",
+        tostring(x), ", ", tostring(y), ", ", tostring(z))
+    end
     pitch = pitch or 1
     for x0=32-mapRadius, mapRadius, 64 do
         for z0=32-mapRadius, mapRadius, 64 do

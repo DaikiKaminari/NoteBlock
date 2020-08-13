@@ -1,4 +1,4 @@
--- [V1.31]
+-- [V1.32]
 --- INIT ---
 function init()
 	print("\n--- INIT objectJSON ---")
@@ -12,7 +12,12 @@ end
 --- FUNCTIONS ---
 -- returns json object with the list of players
 function listConnectedPlayers()
-	local str = http.get("http://api.mineaurion.com/v1/serveurs").readAll()
+	local obj = http.get("http://api.mineaurion.com/v1/serveurs")
+	if obj == nil then
+		print("Warning : HTTP request on [http://api.mineaurion.com/v1/serveurs] failed.")
+		return nil
+	end
+	local str = obj.readAll()
 	local arrObj = json.decode(str) -- array of json object containing each server
 	return arrObj
 end
@@ -43,7 +48,8 @@ function decodeHTTP(link)
 	end
 	local request = http.get(link)
 	if request == nil then
-		error("HTTP request on [" .. link .. "] failed.")
+		print("Warning : HTTP request on [" .. link .. "] failed.")
+		return nil
 	end
 	return json.decode(request.readAll())
 end
@@ -58,7 +64,8 @@ function decodeHTTPSave(link, filename)
 	end
 	local request = http.get(link)
 	if request == nil then
-		error("HTTP request on [" .. link .. "] failed.")
+		print("Warning : HTTP request on [" .. link .. "] failed.")
+		return nil
 	end
 	local h = fs.open(filename, "w")
 	h.write(encodePretty(decode(request.readAll())))

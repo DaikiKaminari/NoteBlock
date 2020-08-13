@@ -46,15 +46,15 @@ local function loadConfig()
             conf["radius"] = tonumber(io.read())
         end
         print("\nMap center coordinates :")
-        while type(conf["X0"]) ~= "number" do
+        while type(conf["x0"]) ~= "number" do
             print("\nX0 :")
             conf["x0"] = tonumber(io.read())
         end
-        while type(conf["Y0"]) ~= "number" do
+        while type(conf["y0"]) ~= "number" do
             print("\nY0 :")
             conf["y0"] = tonumber(io.read())
         end
-        while type(conf["Z0"]) ~= "number" do
+        while type(conf["z0"]) ~= "number" do
             print("\nZ0 :")
             conf["z0"] = tonumber(io.read())
         end
