@@ -62,9 +62,6 @@ local function init(apis)
         error("NoteBlock peripheral not found.")
     end
     monitor = peripheral.find("monitor")
-    if monitor ~= nil then
-        actualizeDisplay()
-    end
     -- run init() for each API
     for _,path in pairs(apis) do
         local api
@@ -90,6 +87,10 @@ end
 --- MAIN CALL ---
 local function main()
     init({"lib/sound", "soundManager", "parser"})
+    if monitor ~= nil then
+        actualizeDisplay()
+    end
+    
     local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "PLAY_GLOBALLY", "TEST_SOUND", "RESET_CONFIG"}
     local input = ""
     while true do
