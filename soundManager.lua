@@ -18,7 +18,7 @@ function init()
     else
         conf = objectJSON.decodeFromFile("config")
     end
-    print("API [soundManager] loaded")
+    print("API [soundManager] initialized")
 end
 
 

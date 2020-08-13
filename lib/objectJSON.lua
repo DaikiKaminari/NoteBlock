@@ -6,7 +6,7 @@ function init()
 		error("File not found : [lib/json]")
 	end
 	os.loadAPI("lib/json")
-	print("API [lib/json] loaded")
+	print("API [lib/json] initialized")
 end
 
 --- FUNCTIONS ---

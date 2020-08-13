@@ -6,7 +6,7 @@ function init()
     end
     os.loadAPI("lib/objectJSON")
     objectJSON.init()
-    print("API [lib/sound] loaded")
+    print("API [lib/sound] initialized")
 end
 
 --- GLOBAL VARIABLES ---
