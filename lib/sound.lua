@@ -126,14 +126,14 @@ function playSoundGlobally(noteBlock, soundID, mapRadius, x0, y0, z0, pitch)
     if soundID == nil or soundID == "" then
         error("soundID cannot be nil or empty : " .. tostring(soundID))
     end
-    if mapRadius == nil or x == nil or y == nil or z == nil then
-        print("mapRadius, x, y, z cannot be nil : ", tostring(mapRadius), ", ",
-        tostring(x), ", ", tostring(y), ", ", tostring(z))
+    if mapRadius == nil or x0 == nil or y0 == nil or z0 == nil then
+        error("mapRadius, x, y, z cannot be nil : " .. tostring(mapRadius) .. ", " ..
+        tostring(x0) .. ", " .. tostring(y0) .. ", " .. tostring(z0))
     end
     pitch = pitch or 1
-    for x=32-mapRadius, mapRadius, 64 do
-        for z=32-mapRadius, mapRadius, 64 do
-            playSound(noteBlock, soundID, x - x0, 100 - y0, z - z0, pitch, 100)
+    for xTarget=32-mapRadius, mapRadius, 64 do
+        for zTarget=32-mapRadius, mapRadius, 64 do
+            playSound(noteBlock, soundID, xTarget - x0, 100 - y0, zTarget - z0, pitch, 100)
         end
     end
 end
