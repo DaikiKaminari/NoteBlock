@@ -77,8 +77,8 @@ function displaySounds(filename, oneByLine)
         return
     end
     local soundNames = {}
-    for name,_ in sounds do
-        soundNames[#soundNames] = soundNames
+    for name,_ in pairs(sounds) do
+        soundNames[#soundNames + 1] = name
     end
     table.sort(soundNames)
     local w, h = term.getSize()
@@ -89,7 +89,7 @@ function displaySounds(filename, oneByLine)
         end
     else
         local line
-        for _,name in ipairs(sounds) do
+        for _,name in ipairs(soundNames) do
             if line == nil then
                 line = name
             elseif string.len(line .. name) + 3 <= w then
