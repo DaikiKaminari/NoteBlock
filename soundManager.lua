@@ -1,5 +1,3 @@
-local conf  -- table : configuration
-
 --- INIT ---
 function init()
     print("\n--- INIT soundManager ---")
@@ -15,8 +13,6 @@ function init()
     os.loadAPI("lib/sound")
     if not fs.exists("config") then
         error("[config] not found.")
-    else
-        conf = objectJSON.decodeFromFile("config")
     end
     print("API [soundManager] initialized")
 end
@@ -66,6 +62,7 @@ end
 
 -- plays a sound and ask to repeat
 local function playSoundAndRepeat(isGlobal, noteBlock, soundID, dx, dy, dz, pitch, volume)
+    local conf = objectJSON.decodeFromFile("config")
     local play = ""
     while play == "" do
         if isGlobal then
@@ -95,6 +92,7 @@ end
 
 -- return delta vector bewteen user location and coordinates he enters
 local function getCoords()
+    local conf = objectJSON.decodeFromFile("config")
     print("\nEnter coordinates :")
     print("X : ")
     local x = tonumber(io.read())
