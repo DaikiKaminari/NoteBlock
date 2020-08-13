@@ -11,9 +11,6 @@ function init()
         error("[lib/sound] not found.")
     end
     os.loadAPI("lib/sound")
-    if not fs.exists("config") then
-        error("[config] not found.")
-    end
     print("API [soundManager] initialized")
 end
 

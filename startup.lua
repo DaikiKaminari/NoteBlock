@@ -75,6 +75,7 @@ local function init(apis)
             _G[api].init()
         end
     end
+    -- load or create configuration
     loadConfig()
 end
 
