@@ -81,7 +81,7 @@ end
 
 --- FUNCTIONS ---
 -- prints all registered sounds
-function actualizeDisplay()
+local function actualizeDisplay()
     term.clear()
     sound.displaySounds(filename, false)
 end
@@ -89,7 +89,7 @@ end
 
 --- MAIN CALL ---
 local function main()
-    init({"lib/objectJSON", "soundManager", "parser"})
+    init({"lib/sound", "soundManager", "parser"})
     local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "PLAY_GLOBALLY", "RESET_CONFIG"}
     local input = ""
     while true do
