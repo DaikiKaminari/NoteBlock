@@ -131,8 +131,8 @@ function playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch)
         tostring(x), ", ", tostring(y), ", ", tostring(z))
     end
     pitch = pitch or 1
-    for x0=32-mapRadius, mapRadius, 64 do
-        for z0=32-mapRadius, mapRadius, 64 do
+    for x0=32-mapRadius, mapRadius*2, 64 do
+        for z0=32-mapRadius, mapRadius*2, 64 do
             playSound(noteBlock, soundID, x0 - x, 100 - y, z0 - z, pitch, 100)
         end
     end
@@ -153,7 +153,9 @@ function playGlobalSoundMultipleTimes(noteBlock, soundID, times, delay, mapRadiu
     mapRadius = mapRadius or 5000
     while not times or times > 0 do
         playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch)
-        times = times - 1
+        if times then
+            times = times - 1
+        end
         sleep(delay)
     end
 end
