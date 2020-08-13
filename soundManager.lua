@@ -2,21 +2,23 @@ local conf = {}             -- table : configuration (x,y,z coords of the comput
 
 --- INIT ---
 function init()
+    print("\n--- INIT soundManager ---")
     if not fs.exists("lib/objectJSON") then
-        error("[lib/objectJSON] file not found.")
+        error("[lib/objectJSON] not found.")
     end
     os.loadAPI("lib/objectJSON")
     objectJSON.init()
 
     if not fs.exists("lib/sound") then
-        error("[lib/sound] file not found.")
+        error("[lib/sound] not found.")
     end
     os.loadAPI("lib/sound")
     if not fs.exists("config") then
-        error("[config] file not found.")
+        error("[config] not found.")
     else
         conf = objectJSON.decodeFromFile("config")
     end
+    print("API [soundManager] loaded")
 end
 
 

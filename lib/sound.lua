@@ -1,10 +1,12 @@
 --- INIT ---
 function init()
+    print("\n--- INIT sound ---")
     if not fs.exists("lib/objectJSON") then
         error("[lib/objectJSON] not found.")
     end
     os.loadAPI("lib/objectJSON")
     objectJSON.init()
+    print("API [lib/sound] loaded")
 end
 
 --- GLOBAL VARIABLES ---
@@ -59,7 +61,7 @@ end
 -- remove a sound from the list
 function delSound(filename, soundName)
     if soundName == nil then
-        error("[soundName] is nil.")
+        error("soundName is nil.")
     end
     local sounds = objectJSON.decodeFromFile(filename)
     local soundID = removekey(sounds, soundName)
@@ -101,10 +103,10 @@ end
 -- plays a sound thanks to it's ID
 function playSound(noteBlock, soundID, dX, dY, dZ, pitch, volume)
     if noteBlock == nil then
-        error("[noteBlock] peripheral is nil.")
+        error("noteBlock peripheral is nil.")
     end
     if soundID == nil then
-        error("[soundID] is nil.")
+        error("soundID is nil.")
     end
     if pitch == nil then
         pitch = 1 
@@ -122,10 +124,10 @@ end
 -- plays a sound on the whole map
 function playSoundGlobally(noteBlock, soundID, mapRadius, x, y, z, pitch)
     if soundID == nil or soundID == "" then
-        error("[soundID] cannot be nil or empty : " .. tostring(soundID))
+        error("soundID cannot be nil or empty : " .. tostring(soundID))
     end
     if mapRadius == nil or x == nil or y == nil or z == nil then
-        print("[mapRadius], [x], [y], [z] cannot be nil : ", tostring(mapRadius), ", ",
+        print("mapRadius, x, y, z cannot be nil : ", tostring(mapRadius), ", ",
         tostring(x), ", ", tostring(y), ", ", tostring(z))
     end
     pitch = pitch or 1
