@@ -81,6 +81,12 @@ end
 local function actualizeDisplay()
     term.clear()
     sound.displaySounds(filename, false)
+    if monitor ~= nil then
+        local native = term.native()
+        term.redirect(monitor)
+        sound.displaySounds(filename, true)
+        term.redirect(native)
+    end
 end
 
 

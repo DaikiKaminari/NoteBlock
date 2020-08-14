@@ -21,7 +21,7 @@ local function waitForEchap()
     local event, nbKey
     while true do
         event, nbKey = os.pullEvent()
-        if event == "key" and nbKey = 211 then
+        if event == "key" and nbKey == 211 then
             return
         end
         sleep(0)
