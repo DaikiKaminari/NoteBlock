@@ -184,6 +184,7 @@ local function testSoundCore(noteBlock, filename)
         local input = io.read()
         if string.upper(input) == "Y" then
             addSound(filename, soundID)
+            print("Sound added.")
         end
     end
 end
