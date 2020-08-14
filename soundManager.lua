@@ -33,7 +33,6 @@ end
 function addSound(filename, soundID)
     print("\nAdding new sound, please specify :\n\nSound name : ")
     local soundName = io.read()
-    local soundID
     if soundID == nil then
         print("\nSound ID : ")
         soundID = io.read()
@@ -74,7 +73,7 @@ local function playSoundAndRepeat(isGlobal, noteBlock, soundID, dx, dy, dz, pitc
         print("\nPlay the sound again ?")
         print(" - *nothing* : repeat the sound 1 time")
         print(" - spam : ask to repeat the sound multiple times")
-        print(" - anything else will stop the program")
+        print(" - anything else : menu")
         play = io.read()
         if string.upper(play) == "SPAM" then
             print("\nTimes the sound will be repeated (nothing = unlimited)")
@@ -96,14 +95,11 @@ local function getCoords()
     local conf = objectJSON.decodeFromFile("config")
     print("\nEnter coordinates :")
     print("X : ")
-    local x = tonumber(io.read())
-    x = type(x) == "number" and x or conf["x"]
+    local x = tonumber(io.read()) or conf["x"]
     print("Y : ")
-    local y2 = tonumber(io.read())
-    y = type(y) == "number" and y or conf["y"]
+    local y = tonumber(io.read()) or conf["y"]
     print("Z : ")
-    local z = tonumber(io.read())
-    z = type(z) == "number" and z or conf["z"]
+    local z = tonumber(io.read()) or conf["z"]
     return x - conf["x"], y - conf["y"], z - conf["z"]
 end
 
@@ -184,7 +180,6 @@ local function testSoundCore(noteBlock, filename)
         local input = io.read()
         if string.upper(input) == "Y" then
             addSound(filename, soundID)
-            print("Sound added.")
         end
     end
 end
