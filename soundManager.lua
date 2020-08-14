@@ -30,11 +30,14 @@ end
 
 --- FUNCTIONS ---
 -- adds a new sound to json file containing all the sounds with informations provided by user
-function addSound(filename)
+function addSound(filename, soundID)
     print("\nAdding new sound, please specify :\n\nSound name : ")
     local soundName = io.read()
-    print("\nSound ID : ")
-    local soundID = io.read()
+    local soundID
+    if soundID == nil then
+        print("\nSound ID : ")
+        soundID = io.read()
+    end
     if sound.addSound(filename, soundName, soundID) then
         print("\nSound [" .. soundName .. "] with ID [" .. soundID .. "] added to list.")
     else
@@ -168,7 +171,7 @@ function playSoundGlobally(filename, noteBlock)
 end
 
 -- core function for testSound()
-local function testSoundCore(noteBlock)
+local function testSoundCore(noteBlock, filename)
     local soundID
     while true do
         print("\nEnter sound ID :")
@@ -177,11 +180,16 @@ local function testSoundCore(noteBlock)
             return
         end
         sound.playSound(noteBlock, soundID, 1, 4)
+        print("Want to add it (y/n) ?")
+        local input = io.read()
+        if string.upper(input) == "Y" then
+            addSound(filename, soundID)
+        end
     end
 end
 
 -- plays a sound once and where the computer is asking only the ID of the sound
-function testSound(noteBlock)
+function testSound(noteBlock, filename)
     print('\nPress *supp* to stop.')
-    parallel.waitForAny(waitForEchap, function() testSoundCore(noteBlock) end)
+    parallel.waitForAny(waitForEchap, function() testSoundCore(noteBlock, filename) end)
 end

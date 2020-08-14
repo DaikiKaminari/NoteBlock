@@ -105,9 +105,7 @@ local function main()
             print(" - " .. v)
         end
         input = io.read()
-        if string.upper(input) ~= "TEST_SOUND" then
-            actualizeDisplay()
-        end
+        actualizeDisplay()
         parser.parse(filename, noteBlock, input)
     end
 end
