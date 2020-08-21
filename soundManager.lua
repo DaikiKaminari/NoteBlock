@@ -163,7 +163,7 @@ function playSoundGlobally(filename, noteBlock)
     end
     print("\nPitch (0.0-2.0) : ")
     local pitch = tonumber(io.read())
-    playSoundAndRepeat(true, noteBlock, soundID)
+    playSoundAndRepeat(true, noteBlock, soundID, nil, nil, nil, pitch)
 end
 
 -- core function for testSound()

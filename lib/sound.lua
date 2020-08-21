@@ -113,12 +113,8 @@ function playSound(noteBlock, soundID, dX, dY, dZ, pitch, volume)
     if soundID == nil then
         error("soundID is nil.")
     end
-    if pitch == nil then
-        pitch = 1 
-    end
-    if volume == nil then
-        volume = 1000
-    end
+    pitch = pitch or 1
+    volume = volume or 10
     if dX == nil then
         noteBlock.playSound(soundID, pitch, volume)
     else
