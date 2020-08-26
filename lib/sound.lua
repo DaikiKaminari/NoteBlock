@@ -19,6 +19,16 @@ local function removekey(tab, key)
     return element
 end
 
+-- returns true if an element is present as a key of a table
+local function isKeyPresent(tab, key)
+    for k,_ in pairs(tab) do
+        if k == key then
+            return true
+        end
+    end
+    return false
+end
+
 --- FUNCTIONS ---
 -- returns sound ID corresponding to a sound name
 function getSoundID(filename, soundName)
@@ -28,10 +38,10 @@ function getSoundID(filename, soundName)
     local sounds = objectJSON.decodeFromFile(filename)
     local soundID = sounds[soundName]
     if soundID == nil then
-        soundID = sounds[sting.upper(soundName)]
+        soundID = sounds[string.upper(soundName)]
     end
     if soundID == nil then
-        soundID = sounds[sting.lower(soundName)]
+        soundID = sounds[string.lower(soundName)]
     end
     return soundID
 end
@@ -73,10 +83,15 @@ function modifySound(filename, soundName, newSoundName)
         return false
     end
     local sounds = objectJSON.decodeFromFile(filename)
+    if not isKeyPresent(sounds, soundName) then
+        print("\nSound name [" .. soundName .. "] not present.")
+        return false
+    end
     local soundID = sounds[soundName]
     removekey(sounds, soundName)
     sounds[newSoundName] = soundID
     objectJSON.encodeAndSavePretty(filename, sounds)
+    return true
 end
 
 -- remove a sound from the list
@@ -91,7 +106,7 @@ function delSound(filename, soundName)
 end
 
 -- display all sounds
-function displaySounds(filename, oneByLine)
+function displaySounds(filename, multipleColumns)
     local sounds = objectJSON.decodeFromFile(filename)
     if next(sounds) == nil then
         print("No sound registered yet.")
@@ -104,12 +119,21 @@ function displaySounds(filename, oneByLine)
     table.sort(soundNames)
     local w, h = term.getSize()
     term.clear()
-    if oneByLine then
+    if multipleColumns then -- prints multiple columns of names in alphabetical order
+        local _,l = term.getSize()
+        local x = 1
+        local y = 1
         for _,name in ipairs(soundNames) do
-            print(name .. " - " .. sounds[name])
+            term.setCursorPos(x,y)
+            term.write(name)
+            y = y + 1
+            if y > l then
+                y = 1
+                x = x + 16
+            end
         end
-    else
-        local line
+    else                    -- prints names one after another in the most compacted way
+        local line          
         for _,name in ipairs(soundNames) do
             if line == nil then
                 line = name
@@ -122,6 +146,36 @@ function displaySounds(filename, oneByLine)
         end
         if line ~= "" then
             print(line)
+        end
+    end
+end
+
+-- display sound name and sound IDs
+function displaySoundIDs(filename) -- WIP
+    local _,l = term.getSize()
+    local sounds = objectJSON.decodeFromFile(filename)
+    if next(sounds) == nil then
+        print("No sound registered yet.")
+        return
+    end
+    local soundNames = {}
+    for name,_ in pairs(sounds) do
+        soundNames[#soundNames + 1] = name
+    end
+    table.sort(soundNames)
+    local w, h = term.getSize()
+
+    term.clear()
+    local y = 1
+    for _,name in ipairs(soundNames) do
+        term.setCursorPos(1, y)
+        term.write(name .. " - " .. sounds[name])
+        y = y + 1
+        if n >= l then
+            print("Press enter...")
+            io.read()
+            term.clear()
+            y = 1
         end
     end
 end

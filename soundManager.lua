@@ -28,6 +28,16 @@ local function waitForEchap()
     end
 end
 
+-- returns true if an element is present as a key of a table
+local function isKeyPresent(tab, key)
+    for k,_ in pairs(tab) do
+        if k == key then
+            return true
+        end
+    end
+    return false
+end
+
 --- FUNCTIONS ---
 -- adds a new sound to json file containing all the sounds with informations provided by user
 function addSound(filename, soundID)
