@@ -29,6 +29,26 @@ local function isKeyPresent(tab, key)
     return false
 end
 
+-- returns true if an element is present as a value of a table
+local function isValuePresent(tab, value)
+    for _,v in pairs(tab) do
+        if v == value then
+            return true
+        end
+    end
+    return false
+end
+
+-- returns first key found corresponding to a value
+local function getKey(tab, value)
+    for k,v in pairs(tab) do
+        if v == value then
+            return k
+        end
+    end
+    return nil
+end
+
 --- FUNCTIONS ---
 -- returns sound ID corresponding to a sound name
 function getSoundID(filename, soundName)
@@ -57,11 +77,20 @@ function addSound(filename, soundName, soundID)
     local sounds = objectJSON.decodeFromFile(filename)
     if sounds[soundName] ~= nil then
         print("Sound [" .. soundName .. "] already exists with ID : [" .. sounds[soundID] .. "].")
-        print("Would you like to change sound ID [" .. sounds[soundID] .. "] to [" .. soundID .. "] ? (Y/N)")
+        print("Would you like to change sound ID  from [" .. sounds[soundID] .. "] to [" .. soundID .. "] ? (Y/N)")
         local answer = io.read()
         if answer ~= "Y" and answer ~= "y" then
             return false
         end
+    end
+    if isValuePresent(sounds, soundID) then
+        print("Sound ID [" .. soundID .. "] already exist with sound name [" .. getKey(sounds, soundID) .. "].")
+        print("Woule you like to change sound name from [" .. getKey(sounds, soundID) .. "] to [" .. soundName .. "] ? (Y/N)")
+        local answer = io.read()
+        if answer ~= "Y" and answer ~= "y" then
+            return false
+        end
+        return false
     end
     sounds[soundName] = soundID
     objectJSON.encodeAndSavePretty(filename, sounds)
@@ -127,7 +156,7 @@ function displaySounds(filename, multipleColumns)
             term.setCursorPos(x,y)
             term.write(name)
             y = y + 1
-            if y > l then
+            if y >= l then
                 y = 1
                 x = x + 16
             end

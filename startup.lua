@@ -78,8 +78,10 @@ end
 
 --- FUNCTIONS ---
 -- prints all registered sounds
-local function actualizeDisplay()
-    term.clear()
+local function actualizeDisplay(doNotClear)
+    if not doNotClear then
+        term.clear()
+    end
     sound.displaySounds(filename, false)
     if monitor ~= nil then
         local native = term.native()
@@ -107,6 +109,9 @@ local function main()
         input = io.read()
         actualizeDisplay()
         parser.parse(filename, noteBlock, input)
+        if input == "ADD" or input == "MODIFY" or input == "DEL" then
+            actualizeDisplay(true)
+        end
     end
 end
 
