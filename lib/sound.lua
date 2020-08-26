@@ -49,6 +49,17 @@ local function getKey(tab, value)
     return nil
 end
 
+-- returns an input entered by the user
+local function getInput(question)
+    if not question then
+        print(question)
+    end
+    term.setTextColor(colors.blue)
+    local answer = io.read()
+    term.setTextColor(colors.white)
+    return answer
+end
+
 --- FUNCTIONS ---
 -- returns sound ID corresponding to a sound name
 function getSoundID(filename, soundName)
@@ -68,29 +79,29 @@ end
 
 -- add a new sound to the list
 function addSound(filename, soundName, soundID)
-    if soundName == nil then
-        error("soundName is nil.")
-    elseif soundName == "" then
-        print("soundName cannot be empty.")
+    if soundName == nil or then
+        error("soundName cannot be nil or empty.")
+        return false
+    end
+    if soundID == nil or soundID == "" then
+        print("soundID cannot be nil or empty.")
         return false
     end
     local sounds = objectJSON.decodeFromFile(filename)
     if sounds[soundName] ~= nil then
-        print("Sound [" .. soundName .. "] already exists with ID : [" .. sounds[soundID] .. "].")
-        print("Would you like to change sound ID  from [" .. sounds[soundID] .. "] to [" .. soundID .. "] ? (Y/N)")
-        local answer = io.read()
-        if answer ~= "Y" and answer ~= "y" then
+        print("\nSound [" .. soundName .. "] already exists with ID : [" .. sounds[soundID] .. "].")
+        local answer = getInput("Would you like to change sound ID  from [" .. sounds[soundID] .. "] to [" .. soundID .. "] ? (Y/N)")
+        if string.upper(answer) ~= "Y" then
             return false
         end
     end
     if isValuePresent(sounds, soundID) then
-        print("Sound ID [" .. soundID .. "] already exist with sound name [" .. getKey(sounds, soundID) .. "].")
-        print("Woule you like to change sound name from [" .. getKey(sounds, soundID) .. "] to [" .. soundName .. "] ? (Y/N)")
-        local answer = io.read()
-        if answer ~= "Y" and answer ~= "y" then
+        print("\nSound ID [" .. soundID .. "] already exist with sound name [" .. getKey(sounds, soundID) .. "].")
+        local answer = getInput("Would you like to change sound name from [" .. getKey(sounds, soundID) .. "] to [" .. soundName .. "] ? (Y/N)")
+        if string.upper(answer) ~= "Y" then
             return false
         end
-        return false
+        removekey(sounds, soundName)
     end
     sounds[soundName] = soundID
     objectJSON.encodeAndSavePretty(filename, sounds)
@@ -201,8 +212,7 @@ function displaySoundIDs(filename) -- WIP
         term.write(name .. " - " .. sounds[name])
         y = y + 1
         if n >= l then
-            print("Press enter...")
-            io.read()
+            getInput("Press enter...")
             term.clear()
             y = 1
         end

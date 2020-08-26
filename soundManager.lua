@@ -38,30 +38,36 @@ local function isKeyPresent(tab, key)
     return false
 end
 
+-- returns an input entered by the user
+local function getInput(question)
+    if not question then
+        print(question)
+    end
+    term.setTextColor(colors.blue)
+    local answer = io.read()
+    term.setTextColor(colors.white)
+    return answer
+end
+
 --- FUNCTIONS ---
 -- adds a new sound to json file containing all the sounds with informations provided by user
 function addSound(filename, soundID)
-    print("\nAdding new sound, please specify :\n\nSound name : ")
-    local soundName = io.read()
+    local soundName = getInput("\nAdding new sound, please specify :\n\nSound name : ")
     if soundID == nil then
-        print("\nSound ID : ")
-        soundID = io.read()
+        soundID = getInput("\nSound ID : ")
     end
     if sound.addSound(filename, soundName, soundID) then
         print("\nSound [" .. soundName .. "] with ID [" .. soundID .. "] added to list.")
     else
         print("\nNo new sound have been added.")
     end
-    print("Press enter...")
-    io.read()
+    getInput("Press enter...")
 end
 
 -- modify a sound name
 function modifySound(filename)
-    print("\nEnter the name of the sound you want to modify :")
-    local soundName = io.read()
-    print("\nEnter the new name :")
-    local newSoundName = io.read()
+    local soundName = getInput("\nEnter the name of the sound you want to modify :")
+    local newSoundName = getInput("\nEnter the new name :")
     if sound.modifySound(filename, soundName, newSoundName) then
         print("\nSound [" .. soundName .. "] modified for [" .. newSoundName .. "].")
     else
@@ -71,16 +77,14 @@ end
 
 -- deletes a sound from json file containing all the sounds
 function delSound(filename)
-    print("\nDeleting a sound, please specify :\n\nSound name : ")
-    local soundName = io.read()
+    local soundName = getInput("\nDeleting a sound, please specify :\n\nSound name : ")
     local soundID = sound.delSound(filename, soundName)
     if soundID ~= nil then
         print("\nSound [" .. soundName .. "] which ID was [" .. soundID .. "] removed from list.")
     else
         print("\nThis sound does not exist.")
     end
-    print("Press enter...")
-    io.read()
+    getInput("Press enter...")
 end
 
 -- plays a sound and ask to repeat
@@ -97,12 +101,10 @@ local function playSoundAndRepeat(isGlobal, noteBlock, soundID, dx, dy, dz, pitc
         print(" - *nothing* : repeat the sound 1 time")
         print(" - spam : ask to repeat the sound multiple times")
         print(" - anything else : menu")
-        play = io.read()
+        play = getInput()
         if string.upper(play) == "SPAM" then
-            print("\nTimes the sound will be repeated (nothing = unlimited)")
-            local times = tonumber(io.read())
-            print("\nDelay between two sounds in second (nothing = no delay)")
-            local delay = tonumber(io.read())
+            local times = tonumber(getInput("\nTimes the sound will be repeated (nothing = unlimited)"))
+            local delay = tonumber(getInput("\nDelay between two sounds in second (nothing = no delay)"))
             print("\nPress *supp* to stop...")
             if isGlobal then
                 parallel.waitForAny(waitForEchap, function() sound.playGlobalSoundMultipleTimes(noteBlock, soundID, times, delay, conf["radius"], conf["x"], conf["y"], conf["z"], pitch, volume) end)
@@ -117,12 +119,9 @@ end
 local function getCoords()
     local conf = objectJSON.decodeFromFile("config")
     print("\nEnter coordinates :")
-    print("X : ")
-    local x = tonumber(io.read()) or conf["x"]
-    print("Y : ")
-    local y = tonumber(io.read()) or conf["y"]
-    print("Z : ")
-    local z = tonumber(io.read()) or conf["z"]
+    local x = tonumber(getInput("X : ")) or conf["x"]
+    local y = tonumber(getInput("Y : ")) or conf["y"]
+    local z = tonumber(getInput("Z : ")) or conf["z"]
     return x - conf["x"], y - conf["y"], z - conf["z"]
 end
 
@@ -130,8 +129,7 @@ end
 function playSound(filename, noteBlock, here)
     local soundID
     print("\nPlaying a sound, please specify:")
-    print("\nSound name : ")
-    local soundName = io.read()
+    local soundName = getInput("\nSound name : ")
     local soundID = sound.getSoundID(filename, soundName)
     if soundID == nil then
         print("No sound matching this name.")
@@ -147,25 +145,20 @@ end
 
 -- play a sound registered in json sound list or with an ID, can specify each parameter
 function playCustomSound(filename, noteBlock, here)
-    print('\nPlaying a sound, please specify:\nUsing ID (enter "y" for yes) ?')
-    local usingID = io.read()
+    local usingID = getInput('\nPlaying a sound, please specify:\nUsing ID (enter "y" for yes) ?')
     local soundID
     if string.upper(usingID) == "Y" then
-        print("\nSoundID : ")
-        soundID = io.read()
+        soundID = getInput("\nSoundID : ")
     else
-        print("\nSound name : ")
-        local soundName = io.read()
+        local soundName = getInput("\nSound name : ")
         soundID = sound.getSoundID(filename, soundName)
         if soundID == nil then
             print("No sound matching this name.")
             return
         end
     end
-    print("\nVolume (0-1000) : ")
-    local volume = tonumber(io.read())
-    print("\nPitch (0.0-2.0) : ")
-    local pitch = tonumber(io.read())
+    local volume = tonumber(getInput("\nVolume (0-1000) : "))
+    local pitch = tonumber(getInput("\nPitch (0.0-2.0) : "))
     if here then
         playSoundAndRepeat(false, noteBlock, soundID, 0, 0, 0, pitch, volume)
     else
@@ -177,15 +170,13 @@ end
 -- plays the sound on the whole map
 function playSoundGlobally(filename, noteBlock)
     print("\nPlaying a sound, please specify:")
-    print("\nSound name : ")
-    local soundName = io.read()
+    local soundName = getInput("\nSound name : ")
     local soundID = sound.getSoundID(filename, soundName)
     if soundID == nil then
         print("No sound matching this name.")
         return
     end
-    print("\nPitch (0.0-2.0) : ")
-    local pitch = tonumber(io.read())
+    local pitch = tonumber(getInput("\nPitch (0.0-2.0) : "))
     playSoundAndRepeat(true, noteBlock, soundID, nil, nil, nil, pitch)
 end
 
@@ -193,14 +184,12 @@ end
 local function testSoundCore(noteBlock, filename)
     local soundID
     while true do
-        print("\nEnter sound ID :")
-        soundID = io.read()
+        soundID = getInput("\nEnter sound ID :")
         if string.upper(soundID) == "STOP" then
             return
         end
         sound.playSound(noteBlock, soundID, 1, 4)
-        print("Want to add it (y/n) ?")
-        local input = io.read()
+        local input = getInput("Want to add it (y/n) ?")
         if string.upper(input) == "Y" then
             addSound(filename, soundID)
         end

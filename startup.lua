@@ -3,6 +3,18 @@ local noteBlock             -- table : peripheral, note block
 local monitor               -- table : peripheral, display monitor
 local conf = {}             -- table : configuration (x,y,z coords of the computer)
 
+--- UTILS ---
+-- returns an input entered by the user
+local function getInput(question)
+    if not question then
+        print(question)
+    end
+    term.setTextColor(colors.blue)
+    local answer = io.read()
+    term.setTextColor(colors.white)
+    return answer
+end
+
 --- INIT ---
 local function loadAPIs(apis)
     for _,path in pairs(apis) do
@@ -21,33 +33,26 @@ local function loadConfig()
     if next(conf) == nil then
         print("\nPlease enter note block coordinates :")
         while type(conf["x"]) ~= "number" do
-            print("X :")
-            conf["x"] = tonumber(io.read())
+            conf["x"] = tonumber(getInput("X :"))
         end
         while type(conf["y"]) ~= "number" do
-            print("Y :")
-            conf["y"] = tonumber(io.read())
+            conf["y"] = tonumber(getInput("Y :"))
         end
         while type(conf["z"]) ~= "number" do
-            print("Z :")
-            conf["z"] = tonumber(io.read())
+            conf["z"] = tonumber(getInput("Z :"))
         end
         while type(conf["radius"]) ~= "number" or conf["radius"] < 0 do
-            print("\nMap radius (>= 0) :")
-            conf["radius"] = tonumber(io.read())
+            conf["radius"] = tonumber(getInput("\nMap radius (>= 0) :"))
         end
         print("\nMap center coordinates :")
         while type(conf["x0"]) ~= "number" do
-            print("\nX0 :")
-            conf["x0"] = tonumber(io.read())
+            conf["x0"] = tonumber(getInput("X0 :"))
         end
         while type(conf["y0"]) ~= "number" do
-            print("\nY0 :")
-            conf["y0"] = tonumber(io.read())
+            conf["y0"] = tonumber(getInput("Y0 :"))
         end
         while type(conf["z0"]) ~= "number" do
-            print("\nZ0 :")
-            conf["z0"] = tonumber(io.read())
+            conf["z0"] = tonumber(getInput("Z0 :"))
         end
         objectJSON.encodeAndSavePretty("config", conf)
     end
@@ -76,6 +81,7 @@ local function init(apis)
     loadConfig()
 end
 
+
 --- FUNCTIONS ---
 -- prints all registered sounds
 local function actualizeDisplay(doNotClear)
@@ -98,7 +104,6 @@ local function main()
     if monitor ~= nil then
         actualizeDisplay()
     end
-    
     local inst = {"ADD", "MODIFY", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "PLAY_GLOBALLY", "TEST_SOUND", "RESET_CONFIG"}
     local input = ""
     while true do
@@ -106,7 +111,7 @@ local function main()
         for _,v in pairs(inst) do
             print(" - " .. v)
         end
-        input = io.read()
+        input = getInput()
         actualizeDisplay()
         parser.parse(filename, noteBlock, input)
         if input == "ADD" or input == "MODIFY" or input == "DEL" then
