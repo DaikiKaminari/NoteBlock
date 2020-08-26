@@ -39,9 +39,9 @@ end
 -- add a new sound to the list
 function addSound(filename, soundName, soundID)
     if soundName == nil then
-        error("[soundName] is nil.")
+        error("soundName is nil.")
     elseif soundName == "" then
-        print("[soundName] cannot be empty.")
+        print("soundName cannot be empty.")
         return false
     end
     local sounds = objectJSON.decodeFromFile(filename)
@@ -56,6 +56,27 @@ function addSound(filename, soundName, soundID)
     sounds[soundName] = soundID
     objectJSON.encodeAndSavePretty(filename, sounds)
     return true
+end
+
+-- modify sound name
+function modifySound(filename, soundName, newSoundName)
+    if filename == nil then
+        print("filename cannot be nil.")
+        return false
+    end
+    if soundName == nil or soundName == "" then
+        print("soundName cannot be empty or nil.")
+        return false
+    end
+    if newSoundName == nil or newSoundName == "" then
+        print("newSoundName cannot be empty or nil.")
+        return false
+    end
+    local sounds = objectJSON.decodeFromFile(filename)
+    local soundID = sounds[soundName]
+    removekey(sounds, soundName)
+    sounds[newSoundName] = soundID
+    objectJSON.encodeAndSavePretty(filename, sounds)
 end
 
 -- remove a sound from the list

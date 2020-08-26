@@ -10,6 +10,7 @@ end
 -- parses the instructions and call the corresponding function
 function parse(filename, noteBlock, input)
     if string.upper(input) == "ADD" then soundManager.addSound(filename)
+    elseif string.upper(input) == "MODIFY" then soundManager.modifySound(filename)
     elseif string.upper(input) == "DEL" then soundManager.delSound(filename)
     elseif string.upper(input) == "PLAY" then soundManager.playSound(filename, noteBlock, false)
     elseif string.upper(input) == "PLAY_HERE" then soundManager.playSound(filename, noteBlock, true)

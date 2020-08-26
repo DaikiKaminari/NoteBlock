@@ -46,6 +46,19 @@ function addSound(filename, soundID)
     io.read()
 end
 
+-- modify a sound name
+function modifySound(filename)
+    print("\nEnter the name of the sound you want to modify :")
+    local soundName = io.read()
+    print("\nEnter the new name :")
+    local newSoundName = io.read()
+    if sound.modifySound(filename, soundName, newSoundName) then
+        print("\nSound [" .. soundName .. "] modified for [" .. newSoundName .. "].")
+    else
+        print("\nSound [" .. soundName .. "] not modified.")
+    end
+end
+
 -- deletes a sound from json file containing all the sounds
 function delSound(filename)
     print("\nDeleting a sound, please specify :\n\nSound name : ")

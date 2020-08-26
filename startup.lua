@@ -97,7 +97,7 @@ local function main()
         actualizeDisplay()
     end
     
-    local inst = {"ADD", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "PLAY_GLOBALLY", "TEST_SOUND", "RESET_CONFIG"}
+    local inst = {"ADD", "MODIFY", "DEL", "PLAY", "PLAY_HERE", "PLAY_CUSTOM", "PLAY_CUSTOM_HERE", "PLAY_GLOBALLY", "TEST_SOUND", "RESET_CONFIG"}
     local input = ""
     while true do
         print("\nWaiting for an instruction...")
