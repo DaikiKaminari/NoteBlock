@@ -6,7 +6,7 @@ local conf = {}             -- table : configuration (x,y,z coords of the comput
 --- UTILS ---
 -- returns an input entered by the user
 local function getInput(question)
-    if not question then
+    if question then
         print(question)
     end
     term.setTextColor(colors.blue)
